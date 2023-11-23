@@ -2,9 +2,10 @@ import java.util.*;
 
 class Solution {
     public String solution(String my_string, String overwrite_string, int s) {
-        String answer = "";
-        answer += my_string.substring(0,s) + overwrite_string + my_string.substring(overwrite_string.length() + s, my_string.length());
-        System.out.println(answer);
+        String answer = new StringBuilder()
+                .append(my_string)
+                .replace(s, s + overwrite_string.length(), overwrite_string)
+                .toString();
         return answer;
     }
 }
