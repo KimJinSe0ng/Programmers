@@ -1,56 +1,63 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.StringTokenizer;
 
 public class Main {
+    static int[][] map;
+    static boolean[][] visited;
     static int n;
-    static int[] dx = {1,-1,0,0};
-    static int[] dy = {0,0,1,-1};
-    static int[][] arr;
+    static ArrayList<Integer> result = new ArrayList<>();
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
     static int cnt;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-        arr = new int[n][n];
-        int answer = 0;
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        map = new int[n][n];
+        visited = new boolean[n][n];
+        cnt = 1; //기준이 아파트(단지로 묶일 첫 아파트)가 포함될 때니 1로 초기화
+
         for (int i = 0; i < n; i++) {
-            String[] temp = br.readLine().split("");
+            st = new StringTokenizer(br.readLine());
+            String line = st.nextToken();
             for (int j = 0; j < n; j++) {
-                arr[i][j] = Integer.parseInt(temp[j]);
+                map[i][j] = Integer.parseInt(line.substring(j, j + 1));
             }
         }
-        ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if(arr[i][j] == 1) {
+
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < n; y++) {
+                if (map[x][y] == 1 && !visited[x][y]) {
+                    dfs(x, y);
+                    result.add(cnt);
                     cnt = 1;
-                    dfs(i, j);
-                    answer++;
-                    list.add(cnt);
                 }
             }
         }
-        Collections.sort(list);
-        System.out.println(answer);
-        for(int i : list) {
-            System.out.println(i);
+
+        Collections.sort(result);
+        System.out.println(result.size());
+        for (int number : result) {
+            System.out.println(number);
         }
     }
 
-    static void dfs(int x, int y) {
+    public static void dfs(int x, int y) {
+        visited[x][y] = true;
+
         for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if(nx >= n || ny >= n || nx < 0 || ny < 0) {
-                continue;
+            int nx = dx[i] + x;
+            int ny = dy[i] + y;
+
+            if (nx >= 0 && ny >= 0 && nx < n && ny < n && !visited[nx][ny] && map[nx][ny] == 1) {
+                cnt++;
+                dfs(nx, ny);
             }
-            if(arr[nx][ny] == 0) {
-                continue;
-            }
-            arr[x][y] = 0;
-            arr[nx][ny] = 0;
-            dfs(nx, ny);
-            cnt++;
         }
     }
 }
