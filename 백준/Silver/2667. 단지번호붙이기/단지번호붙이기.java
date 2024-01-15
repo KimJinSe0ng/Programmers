@@ -1,62 +1,68 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
+    static int[] dx = {0, 1, 0, -1}; //상화좌우 탐색을 위한 배열
+    static int[] dy = {1, 0, -1, 0}; //오른쪽, 아래, 위, 왼쪽
     static int[][] map;
     static boolean[][] visited;
-    static int n;
-    static ArrayList<Integer> result = new ArrayList<>();
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {-1, 1, 0, 0};
-    static int cnt;
-
+    static int[] apartments = new int[25 * 25];
+    static int apartmentsNum = 0; //아파트 단지 번호의 수
+    static int N;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        map = new int[n][n];
-        visited = new boolean[n][n];
-        cnt = 1; //기준이 아파트(단지로 묶일 첫 아파트)가 포함될 때니 1로 초기화
-
-        for (int i = 0; i < n; i++) {
+        N = Integer.parseInt(st.nextToken());
+        map = new int[N][N];
+        visited = new boolean[N][N];
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             String line = st.nextToken();
-            for (int j = 0; j < n; j++) {
+            for (int j = 0; j < N; j++) {
                 map[i][j] = Integer.parseInt(line.substring(j, j + 1));
             }
         }
-
-        for (int x = 0; x < n; x++) {
-            for (int y = 0; y < n; y++) {
-                if (map[x][y] == 1 && !visited[x][y]) {
-                    dfs(x, y);
-                    result.add(cnt);
-                    cnt = 1;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (map[i][j] == 1 && !visited[i][j]) {
+                    apartmentsNum++;
+                    BFS(i, j);
                 }
             }
         }
-
-        Collections.sort(result);
-        System.out.println(result.size());
-        for (int number : result) {
-            System.out.println(number);
+        Arrays.sort(apartments);
+        System.out.println(apartmentsNum);
+        for (int i = 0; i < apartments.length; i++) {
+            if (apartments[i] == 0) {
+            } else {
+                System.out.println(apartments[i]);
+            }
         }
     }
 
-    public static void dfs(int x, int y) {
-        visited[x][y] = true;
-
-        for (int i = 0; i < 4; i++) {
-            int nx = dx[i] + x;
-            int ny = dy[i] + y;
-
-            if (nx >= 0 && ny >= 0 && nx < n && ny < n && !visited[nx][ny] && map[nx][ny] == 1) {
-                cnt++;
-                dfs(nx, ny);
+    private static void BFS(int i, int j) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{i, j});
+        visited[i][j] = true;
+        apartments[apartmentsNum]++;
+        while (!queue.isEmpty()) {
+            int[] now = queue.poll();
+//            System.out.println("now = " + now[0] + " " + now[1]);
+            for (int k = 0; k < 4; k++) {
+                int x = now[0] + dx[k];
+                int y = now[1] + dy[k];
+                if (x >= 0 && y >= 0 && x < N && y < N) {
+                    if (map[x][y] != 0 && !visited[x][y]) {
+                        visited[x][y] = true;
+                        queue.add(new int[]{x, y});
+                        apartments[apartmentsNum]++;
+                    }
+                }
             }
         }
     }
