@@ -1,16 +1,23 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        // 입력값을 String형 변수 sNum에 저장한 후 char[]형 변수로 변환하기
-        String sNum = sc.next();
-        char[] cNum = sNum.toCharArray();
+public class Main { //11720
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+
+        st = new StringTokenizer(br.readLine());
+        String num = st.nextToken();
+        
+        char[] num_list = num.toCharArray();
+
         int sum = 0;
-        for (int i = 0; i < cNum.length; i++) {
-            sum += cNum[i] - '0'; // cNum[i]를 정수형으로 변환하면서 sum에 더하여 누적하기
+        for (int i = 0; i < num_list.length; i++) {
+            sum += num_list[i] - '0';
         }
-        System.out.print(sum);
+        System.out.println(sum);
     }
 }
