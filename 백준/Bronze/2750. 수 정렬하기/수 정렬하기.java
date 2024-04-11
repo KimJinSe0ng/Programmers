@@ -1,31 +1,31 @@
-import java.util.Scanner;
- 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 public class Main {
-	public static void main(String[] args) {
-    
-		Scanner in = new Scanner(System.in);
-		
-		int N = in.nextInt();
-		int[] arr = new int[N];
-		
-		for(int i = 0; i < N; i++) {
-			arr[i] = in.nextInt();
-		}
- 
-		// Selection sort
-		for(int i = 0; i < N - 1; i++) {
-			for(int j = i + 1; j < N; j++) {
-				if(arr[i] > arr[j]) {
-					int temp = arr[j];
-					arr[j] = arr[i];
-					arr[i] = temp;
-				}
-			}
-		}
-		
-		for(int val : arr) {
-			System.out.println(val);
-		}
- 
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int[] A = new int[N];
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            A[i] = Integer.parseInt(st.nextToken());
+        }
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N - 1 - i; j++) {
+                if (A[j] > A[j + 1]) {
+                    int temp = A[j];
+                    A[j] = A[j + 1];
+                    A[j + 1] = temp;
+                }
+            }
+        }
+
+        for (int i = 0; i < N; i++) {
+            System.out.println(A[i]);
+        }
+    }
 }
