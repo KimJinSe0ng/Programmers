@@ -1,57 +1,64 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-
-    private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static ArrayList<Integer>[] A;
+    static boolean[] visited;
+    static int n, m;
+    static int start, target;
+    static int call = 0;
+    static int count = 0;
+    static boolean find = false;
 
     public static void main(String[] args) throws IOException {
-
-        int num = Integer.parseInt(br.readLine());
-
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int start = Integer.parseInt(st.nextToken());
-        int end = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        start = Integer.parseInt(st.nextToken());
+        target = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        m = Integer.parseInt(st.nextToken());
+        A = new ArrayList[n + 1];
+        visited = new boolean[n + 1];
 
-        int loop = Integer.parseInt(br.readLine());
-
-        List<List<Integer>> family = new ArrayList<>();
-        for(int i = 0; i < num + 1 ; i ++) {
-            family.add(new ArrayList<>());
+        for (int i = 1; i < n + 1; i++) {
+            A[i] = new ArrayList<>();
         }
 
-        for (int i=0; i<loop; i++) {
+        for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            family.get(a).add(b);
-            family.get(b).add(a);
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+            A[x].add(y);
+            A[y].add(x);
         }
-        int[] visited = new int[num+1];
-        bfs(visited, start, family);
-        System.out.println(visited[end] == 0 ? -1 : visited[end]);
+
+        bfs(start, call);
+        if (!find) {
+            System.out.println(-1);
+        } else {
+            System.out.println(count);
+        }
     }
 
-    private static void bfs(int[] visited, int start, List<List<Integer>> list){
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(start);
-        visited[start] = 0;
-
-        while(!queue.isEmpty()){
-            Integer current = queue.poll();
-            int current_dist = visited[current];
-
-            for(Integer next: list.get(current)){
-                if (visited[next] == 0 || visited[next] >= current_dist + 1) {
-                    queue.add(next);
-                    visited[next] = current_dist + 1;
+    private static void bfs(int start, int call) {
+        if (find) {
+            return;
+        }
+        call++;
+        visited[start] = true;
+        for (int v : A[start]) {
+            if (!visited[v]) {
+                if (v == target) {
+                    find = true;
+                    count = call;
+                    return;
                 }
+                visited[v] = true;
+                bfs(v, call);
             }
         }
     }
