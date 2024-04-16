@@ -1,6 +1,6 @@
 # [level 1] 잔챙이 잡은 수 구하기 - 293258 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/293258?language=mysql) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/293258) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 04월 01일 23:45:20
+2024년 04월 17일 00:53:23
 
 ### 문제 설명
 
