@@ -1,0 +1,34 @@
+-- 최적화 비트 연산이 더 빠를 수 있음
+WITH FRONTEND_SKILL AS(
+    SELECT CODE
+    FROM SKILLCODES
+    WHERE CATEGORY = 'Front End'
+)
+
+SELECT
+    DISTINCT D.ID,
+    D.EMAIL,
+    D.FIRST_NAME,
+    D.LAST_NAME
+FROM
+    DEVELOPERS D
+JOIN
+    FRONTEND_SKILL FS
+ON
+    D.SKILL_CODE & FS.CODE
+ORDER BY
+    D.ID;
+
+# SELECT
+#     ID,
+#     EMAIL,
+#     FIRST_NAME,
+#     LAST_NAME
+# FROM
+#     DEVELOPRDER
+# WHERE
+#     SKILL_CODE & (SELECT SUM(CODE)
+#                   FROM SKILLCODES
+#                   WHERE CATEGORY = 'Front End'
+#     )
+# ORDER BY ID;
