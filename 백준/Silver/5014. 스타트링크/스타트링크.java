@@ -8,20 +8,11 @@ import java.util.StringTokenizer;
 
 public class Main {
     static int F, S, G, U, D;
-    static boolean visited[];
-    static int[] results;
-    static ArrayList<Integer> buttons;
-    public static void main(String[] args) throws IOException {
-        /**
-         * 건물 : 총 F층
-         * 스타트링크가 있는 곳 : G층
-         * 강호가 있는 곳 : S층
-         * 위로 U층을 가는 버튼 : U
-         * 아래로 D층을 가는 버튼 : D
-         * U층 위, D층 아래에 해당하는 층이 없을 때는 엘리베이터는 움직이지 않음
-         * G층에 갈 수 없다면 "use the stairs"를 출력
-         * 강호가 G층에 도착하려면, 버튼을 최소 몇번 눌러야 하는지 구하라.
-         */
+    static boolean[] visited;
+    static int[] click;
+    static boolean isArrival;
+    public static void main(String[] args) throws IOException{
+        //총 F층, 회사 위치 G, 내 위치 S, G층으로 이동하려고 함
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         F = Integer.parseInt(st.nextToken());
@@ -29,45 +20,51 @@ public class Main {
         G = Integer.parseInt(st.nextToken());
         U = Integer.parseInt(st.nextToken());
         D = Integer.parseInt(st.nextToken());
-
-        visited = new boolean[F+1];
-        results = new int[F+1];
-        buttons = new ArrayList<>();
-        buttons.add(U);
-        buttons.add(D);
-        BFS(S);
+        int[] moves = {U, D};
+        visited = new boolean[F + 1];
+        click = new int[F + 1];
+        bfs(S, moves);
+        if (isArrival) {
+            System.out.println(click[G]);
+        } else {
+            System.out.println("use the stairs");
+        }
     }
 
-    private static void BFS(int x) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(x);
-        visited[x] = true;
-        results[x] = 0;
-        while (!queue.isEmpty()) {
-            int now = queue.poll();
-//            System.out.println("now = " + now);
+    private static void bfs(int start, int[] moves) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        visited[start] = true;
+        click[start] = 0;
+        while (!q.isEmpty()) {
+            int now = q.poll();
             if (now == G) {
-//                System.out.println("results = " + results[now]);
-                System.out.println(results[now]);
+                isArrival = true;
                 return;
             }
-            for (int i = 0; i < buttons.size(); i++) {
-                int nx;
-                if (i == 0) {
-                    nx = now + buttons.get(i); //U
-                } else {
-                    nx = now - buttons.get(i); //D
-                }
-//                System.out.println("nx = " + nx);
-                if (nx >= 1 && nx < F+1) {
-                    if (!visited[nx]) {
-                        visited[nx] = true;
-                        queue.add(nx);
-                        results[nx] = results[now] + 1;
+            for (int i = 0; i < moves.length; i++) {
+                int next = getNext(moves, now, i);
+//                System.out.println("next = " + next);
+                if (next >= 1 && next <= F) {
+                    if (!visited[next]) {
+                        visited[next] = true;
+                        q.add(next);
+                        click[next] = click[now] + 1; //깊이 계산
+//                        System.out.println("click[" + next + "] = " + click[next]);
                     }
                 }
             }
         }
-        System.out.println("use the stairs");
     }
+
+    private static int getNext(int[] moves, int now, int i) {
+        int next = now;
+        if (i == 0) {
+            next = now + moves[0];
+        } else {
+            next = now - moves[1];
+        }
+        return next;
+    }
+
 }
