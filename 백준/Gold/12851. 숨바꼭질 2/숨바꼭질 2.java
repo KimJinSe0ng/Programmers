@@ -1,50 +1,76 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int[] dx = {-1, 1, 2};
-	static int cnt=0, res = Integer.MAX_VALUE;
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(st.nextToken());
-		
-		bfs(n, k);
-		System.out.println(res);
-		System.out.println(cnt);
-	}
-	
-	static void bfs(int start, int destination) {
-		Queue<Integer> q = new LinkedList<>();
-		int[] move = new int[100_001];
-		q.add(start);
-		
-		while(!q.isEmpty()) {
-			int pos = q.poll();
-			
-			if(res < move[pos]) return;
-			if(move[pos]<=res && pos == destination) {
-				res = move[pos];
-				cnt++;
-			}
+    static int n, k;
+    static boolean[] visited;
+    static int[] time;
+    static int minTime = Integer.MAX_VALUE;
+    static int way = 0;
 
-			for(int i=0; i<3; i++) {
-				int next = pos;
-				if(i==2) {
-					next = pos*dx[i];
-				}else {
-					next = pos + dx[i];	
-				}
-				
-				if (next>=0 && next <100001) {
-					if(move[next] ==0 || move[next] >= move[pos] + 1) {
-						move[next] = move[pos]+1;
-						q.add(next);
-					}
-				}
-			}
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+        visited = new boolean[100001];
+        time = new int[100001];
+        
+        if (n >= k) {
+            System.out.println(n - k);
+            System.out.println(1);
+            return;
+        }
+        
+        bfs(n);
+        System.out.println(time[k]);
+        System.out.println(way);
+    }
+
+    private static void bfs(int pos) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(pos);
+        visited[pos] = true;
+
+        while (!queue.isEmpty()) {
+            int now = queue.poll();
+
+            if (minTime < time[now]) return;
+
+            for (int i = 0; i < 3; i++) {
+                int next = move(now, i);
+
+                if (next < 0 || next > 100000) continue;
+
+                if (next == k) { //예외 : 시작 부터 수빈이를 만나면
+                    minTime = time[now];
+                    way++;
+                }
+
+                if (time[next] == 0 || time[next] == time[now] + 1) {
+                    queue.add(next);
+                    time[next] = time[now] + 1;
+                }
+            }
+        }
+    }
+
+    private static int move(int now, int index) {
+        switch (index) {
+            case 0:
+                now -= 1;
+                break;
+            case 1:
+                now += 1;
+                break;
+            case 2:
+                now *= 2;
+                break;
+        }
+        return now;
+    }
 }
