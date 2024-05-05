@@ -1,32 +1,24 @@
 import java.util.*;
 
 class Solution {
-    
-    private void visitAll(int computer, int[][] computers, boolean[] isVisited) {
-        Stack<Integer> stack = new Stack<>();
-        stack.push(computer);
-        
-        while (!stack.isEmpty()) {
-            int c = stack.pop();
-            
-            if (isVisited[c]) continue;
-            isVisited[c] = true;
-            
-            for (int next = 0; next < computers[c].length; next++) {
-                if (computers[c][next] == 0) continue;
-                stack.push(next);
-            }
-        }
-    }
     public int solution(int n, int[][] computers) {
-        boolean[] isVisited = new boolean[n];
+        boolean[] visited = new boolean[n];
         int answer = 0;
         for (int i = 0; i < n; i++) {
-            if (isVisited[i]) continue;
-            visitAll(i, computers, isVisited);
-            answer++;
+            if (!visited[i]) {
+                dfs(i, computers, visited);
+                answer++;
+            }
         }
-        
         return answer;
+    }
+
+    private void dfs(int computer, int[][] computers, boolean[] visited) {
+        visited[computer] = true;
+        for (int next = 0; next < computers[computer].length; next++) {
+            if (computers[computer][next] == 1 && !visited[next]) {
+                dfs(next, computers, visited);
+            }
+        }
     }
 }
