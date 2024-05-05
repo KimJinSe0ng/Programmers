@@ -1,7 +1,8 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 class Solution {
+    private static int[] dx = {0, 0, 1, -1};
+    private static int[] dy = {1, -1, 0, 0};
     private static class State {
         public final int x;
         public final int y;
@@ -14,45 +15,36 @@ class Solution {
         }
     }
 
-    private static final int[] dx = {0, 1, 0, -1}; //상하좌우
-    private static final int[] dy = {-1, 0, 1, 0};
-
     public int solution(int[][] maps) {
-        //2.방문검사배열
         boolean[][] visited = new boolean[maps.length][maps[0].length];
-        //3.초기상태
+        return bfs(maps, visited);
+    }
+
+    private static int bfs(int[][] maps, boolean[][] visited) {
         Queue<State> q = new LinkedList<>();
         q.add(new State(0, 0, 1));
         visited[0][0] = true;
-        //4.탐색진행
         while (!q.isEmpty()) {
-            State state = q.poll();
-            //5.현재상태처리
-            if (state.y == maps.length - 1 && state.x == maps[state.y].length - 1) {
-                return state.step;
+            State now = q.poll();
+            if (now.y == maps.length - 1 && now.x == maps[now.y].length - 1) {
+                return now.step;
             }
-            //6.전이상태생성
-            for (int d = 0; d < 4; d++) {
-                int nx = state.x + dx[d];
-                int ny = state.y + dy[d];
-                //7.범위검사
+            for (int i = 0; i < 4; i++) {
+                int nx = now.x + dx[i];
+                int ny = now.y + dy[i];
                 if (ny < 0 || ny >= maps.length || nx < 0 || nx >= maps[ny].length) {
                     continue;
                 }
-                //8.유효성검사
                 if (maps[ny][nx] != 1) {
                     continue;
                 }
-                //9.중복검사
                 if (visited[ny][nx]) {
                     continue;
                 }
-                //10.방문처리&상태전이
                 visited[ny][nx] = true;
-                q.add(new State(nx, ny, state.step + 1));
+                q.add(new State(nx, ny, now.step + 1));
             }
         }
-        return -1; //목표 상태 못 찾을 시
-        
+        return -1;
     }
 }
