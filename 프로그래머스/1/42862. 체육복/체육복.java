@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.stream.*;
 
 class Solution {
-    public int solution(int n, int[] lost, int[] reserve) {
+    public static int solution(int n, int[] lost, int[] reserve) {
         //1.작은 문제의 최적해
         //번호 순서대로 순회할 수 있도록 정렬
         Arrays.sort(lost);
@@ -18,7 +18,9 @@ class Solution {
 
         //2.체육복을 빌리는 학생들을 번호 순서대로 검사
         Queue<Integer> q = new LinkedList<>();
-        for (int l : lost) q.add(l);
+        for (int l : lost) {
+            q.add(l);
+        }
 
         //배열 reserve를 순회하며 큐에 담긴 체육복을 빌려야 하는 학생 중 몇 명에게 빌려줄 수 있는지 셈
         int get = 0; //셀 변수
@@ -37,7 +39,7 @@ class Solution {
                 q.poll();
             }
 
-            if (q.isEmpty()) break;
+            if (q.isEmpty()) break; //큐가 비면 더 이상 체육복이 필요한 학생이 없음
 
             if (q.peek() <= r + 1) { //큐의 가장 앞에는 체육복을 갖고 있는 학생이 빌려줄 수 있는 번호이거나 그보다 큰 번호를 가짐. 빌려줄 수 있는 번호라면 큐에서 해당 학생 제거
                 q.poll();
