@@ -1,44 +1,46 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int M, N;
-    static int[] arr;
-    static boolean[] visit;
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-    static int index = 1;
+    static StringBuilder sb = new StringBuilder();
+    static int n, m;
+    static boolean[] visited;
+    static int[] A;
+
 
     public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(bf.readLine());
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-
-        arr = new int[M];
-        visit = new boolean[N + 1];
-
-        recursion(0);
-        bw.flush();
-        bw.close();
+        visited = new boolean[n + 1];
+        A = new int[m + 1];
+        dfs(0);
+        System.out.println(sb);
     }
 
-    public static void recursion(int index) throws IOException {
-        if (index == M) {
-            for (int i = 0; i < M; i++) {
-                bw.write(arr[i] + " ");
+    private static void dfs(int depth) {
+        if (depth == m) {
+            for (int value : A) {
+                if (value != 0) {
+                    sb.append(value).append(" ");
+                }
             }
-            bw.write("\n");
+            sb.append("\n");
             return;
         }
 
-        for (int i = 1; i <= N; i++) {
-            if(!visit[i]) {
-                arr[index] = i;
-                visit[i] = true;
-                recursion(index + 1);
-                for (int j = i + 1; j <= N; j++) {
-                    visit[j] = false;
+        for (int i = 1; i <= n; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                A[depth] = i;
+                dfs(depth + 1);
+//                visited[i] = false;
+                for (int j = i + 1; j <= n; j++) {
+                    visited[j] = false;
                 }
             }
         }
