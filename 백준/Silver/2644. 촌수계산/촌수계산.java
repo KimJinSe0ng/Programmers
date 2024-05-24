@@ -1,64 +1,64 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-    static ArrayList<Integer>[] A;
-    static boolean[] visited;
-    static int n, m;
-    static int start, target;
-    static int call = 0;
-    static int count = 0;
-    static boolean find = false;
+    static int n, m, x, y;
+    static ArrayList<Integer>[] graph;
+    static int[] visited;
+    static int depth = 0;
+    static boolean isFind = false;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         st = new StringTokenizer(br.readLine());
-        start = Integer.parseInt(st.nextToken());
-        target = Integer.parseInt(st.nextToken());
+        x = Integer.parseInt(st.nextToken());
+        y = Integer.parseInt(st.nextToken());
         st = new StringTokenizer(br.readLine());
         m = Integer.parseInt(st.nextToken());
-        A = new ArrayList[n + 1];
-        visited = new boolean[n + 1];
+        graph = new ArrayList[n + 1];
+        visited = new int[n + 1];
 
-        for (int i = 1; i < n + 1; i++) {
-            A[i] = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            graph[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
-            A[x].add(y);
-            A[y].add(x);
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
+            graph[s].add(e);
+            graph[e].add(s);
         }
 
-        bfs(start, call);
-        if (!find) {
+        BFS(x);
+
+        if (visited[y] == 0) {
             System.out.println(-1);
         } else {
-            System.out.println(count);
+            System.out.println(visited[y]);
         }
     }
 
-    private static void bfs(int start, int call) {
-        if (find) {
-            return;
-        }
-        call++;
-        visited[start] = true;
-        for (int v : A[start]) {
-            if (!visited[v]) {
-                if (v == target) {
-                    find = true;
-                    count = call;
-                    return;
+    private static void BFS(int v) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(v);
+        while (!q.isEmpty()) {
+            int now = q.poll();
+            if (now == y) {
+                return;
+            }
+            for (int next : graph[now]) {
+                if (visited[next] == 0) {
+                    visited[next] = visited[now] + 1;
+                    q.add(next);
                 }
-                visited[v] = true;
-                bfs(v, call);
             }
         }
     }
