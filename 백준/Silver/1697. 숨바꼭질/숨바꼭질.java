@@ -3,61 +3,61 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int n, k;
+    static int N, K;
     static boolean[] visited;
-    static int[] time;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
-        visited = new boolean[100001];
-        time = new int[100001];
-        bfs(n);
-        System.out.println(time[k]);
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        visited = new boolean[100001]; //0~100,000
+
+        BFS(N);
     }
 
-    private static void bfs(int pos) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(pos);
-        visited[pos] = true;
-
+    private static void BFS(int v) {
+        Queue<State> queue = new LinkedList<>();
+        queue.add(new State(v, 0));
+        visited[v] = true;
         while (!queue.isEmpty()) {
-            int cur = queue.poll();
-            if (cur == k) { //예외 : 시작 부터 수빈이를 만나면
+            State now = queue.poll();
+            if (now.pos == K) {
+                System.out.println(now.depth);
                 return;
             }
-            for (int i = 0; i < 3; i++) {
-                int moved = move(cur, i);
-                if (moved >= 0 && moved <= 100000) {
-                    if (!visited[moved]) {
-                        visited[moved] = true;
-                        time[moved] = time[cur] + 1;
-                        queue.add(moved);
-                    }
+            for (int d = 0; d < 3; d++) {
+                int nextPos = move(now.pos, d);
+                if (nextPos < 0 || nextPos > 100000) { //범위 밖이면 pass
+                    continue;
+                }
+                if (!visited[nextPos]) {
+                    queue.add(new State(nextPos, now.depth + 1));
+                    visited[nextPos] = true;
                 }
             }
         }
-
     }
 
-    private static int move(int now, int index) {
-        switch (index) {
-            case 0:
-                now -= 1;
-                break;
-            case 1:
-                now += 1;
-                break;
-            case 2:
-                now *= 2;
-                break;
+    private static class State {
+        public final int pos;
+        public final int depth;
+
+        public State(int pos, int depth) {
+            this.pos = pos;
+            this.depth = depth;
         }
-        return now;
+    }
+
+    private static int move(int pos ,int index) {
+        if (index == 0) {
+            return pos * 2;
+        } else if (index == 1) {
+            return pos + 1;
+        } else {
+            return pos - 1;
+        }
     }
 }
