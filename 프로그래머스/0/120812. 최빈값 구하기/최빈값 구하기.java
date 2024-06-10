@@ -1,23 +1,29 @@
+import java.util.*;
+
 class Solution {
     public int solution(int[] array) {
-        int answer = array[0];
-        int max = 0; int frequent[] = new int[1000];
-        
-        for(int i = 0; i < array.length; i++) {
-            frequent[array[i]]++;
-            
-            if(max < frequent[array[i]]) {
-                max = frequent[array[i]];
-                answer = array[i];
+        HashMap<Integer, Integer> frequencyMap = new HashMap<>();
+
+        // 배열 내 숫자의 빈도수를 계산
+        for (int num : array) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        }
+
+        int maxFrequency = 0;
+        int mode = -1;
+
+        // 최빈값 찾기
+        for (int key : frequencyMap.keySet()) {
+            int frequency = frequencyMap.get(key);
+            if (frequency > maxFrequency) {
+                maxFrequency = frequency;
+                mode = key;
+            } else if (frequency == maxFrequency) {
+                // 최빈값이 여러 개인 경우
+                mode = -1;
             }
         }
-        
-        int temp = 0;
-        for(int j = 0; j < 1000; j++) {
-            if(max == frequent[j]) temp++;
-            if(temp > 1) answer = -1;
-        }
-        
-        return answer;
+
+        return mode;
     }
 }
