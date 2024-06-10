@@ -1,15 +1,19 @@
+import java.util.*;
+
 class Solution {
     public int[] solution(int n) {
-        int[] answer;
-        if (n % 2 == 0) {
-            answer = new int[n / 2];
-        } else {
-            answer = new int[(n + 1) / 2];
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        
+        for(int i = 1; i <= n; i += 2) {
+            arrayList.add(i);
         }
         
-        for (int i = 0; i < answer.length; i++) {
-                answer[i] = (i * 2) + 1;
-            }
-        return answer;
+        // ArrayList를 int[] 배열로 변환
+        int[] result = new int[arrayList.size()];
+        for (int i = 0; i < arrayList.size(); i++) {
+            result[i] = arrayList.get(i);
+        }
+        
+        return result;
     }
 }
