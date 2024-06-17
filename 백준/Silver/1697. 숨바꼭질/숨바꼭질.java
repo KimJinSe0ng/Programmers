@@ -7,47 +7,50 @@ import java.util.StringTokenizer;
 
 public class Main {
     static int N, K;
-    static boolean[] visited;
+    static int[] time; //visited
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
-        visited = new boolean[100001]; //0~100,000
+        time = new int[100001]; //0~100,000
 
-        BFS(N);
+        if (N >= K) {
+            System.out.println(N - K);
+            return;
+        }
+
+        BFS();
     }
 
-    private static void BFS(int v) {
-        Queue<State> queue = new LinkedList<>();
-        queue.add(new State(v, 0));
-        visited[v] = true;
+    private static void BFS() {
+        Queue<Integer> queue = new LinkedList<>();
+
+        queue.add(N);
+        time[N] = 1;
+
         while (!queue.isEmpty()) {
-            State now = queue.poll();
-            if (now.pos == K) {
-                System.out.println(now.depth);
-                return;
-            }
+            int now = queue.poll();
+
             for (int d = 0; d < 3; d++) {
-                int nextPos = move(now.pos, d);
-                if (nextPos < 0 || nextPos > 100000) { //범위 밖이면 pass
+                int next = move(now, d);
+
+                if (next < 0 || next > 100000) { //범위 밖이면 pass
                     continue;
                 }
-                if (!visited[nextPos]) {
-                    queue.add(new State(nextPos, now.depth + 1));
-                    visited[nextPos] = true;
+
+                if (next == K) {
+                    System.out.println(time[now]);
+                    return;
                 }
+
+                if (time[next] == 0) { //첫 방문
+                    queue.add(next);
+                    time[next] = time[now] + 1;
+                }
+
             }
-        }
-    }
-
-    private static class State {
-        public final int pos;
-        public final int depth;
-
-        public State(int pos, int depth) {
-            this.pos = pos;
-            this.depth = depth;
         }
     }
 
