@@ -1,105 +1,108 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
- 
-class virus {
-    int y;
-    int x;
- 
-    public virus(int y, int x) {
-        this.y = y;
-        this.x = x;
-    }
-}
- 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
 public class Main {
- 
-    static int n, m;
+    static int N, M;
+    static int[] dx = {0, 0, 1, -1};
+    static int[] dy = {1, -1, 0, 0};
     static int[][] map;
-    static boolean[][] visit;
-    static int result = Integer.MIN_VALUE;
-    static int[] x = {1, -1, 0, 0}, y = {0, 0, 1, -1};
- 
+    static int safeArea = Integer.MIN_VALUE;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] s = br.readLine().split(" ");
-        n = Integer.parseInt(s[0]);
-        m = Integer.parseInt(s[1]);
-        map = new int[n][m];
-        visit = new boolean[n][m];
-        for (int i = 0; i < n; i++) {
-            String[] s1 = br.readLine().split(" ");
-            for (int j = 0; j < m; j++) {
-                map[i][j] = Integer.parseInt(s1[j]);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        map = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < M; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        dfs(0);
- 
-        System.out.println(result);
+
+        DFS(0);
+
+        System.out.println(safeArea);
     }
- 
-    public static void dfs(int depth) {
-        if (depth == 3) {
-            bfs();
+
+    private static void countSafeArae() { //바이러스 감염 및 안전영역 세기
+        int[][] copyMap = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            copyMap[i] = map[i].clone();
+        }
+
+        Queue<State> q = new LinkedList<>();
+
+        for (int i = 0; i < N; i++) { //큐에 모든 바이러스 추가
+            for (int j = 0; j < M; j++) {
+                if (copyMap[i][j] == 2) {
+                    q.add(new State(i, j));
+                }
+            }
+        }
+
+        while (!q.isEmpty()) { //바이러스 감염
+            State now = q.poll();
+
+            for (int d = 0; d < 4; d++) {
+                int nx = now.x + dx[d];
+                int ny = now.y + dy[d];
+
+                if (nx < 0 || ny < 0 || nx >= N || ny >= M) {
+                    continue;
+                }
+
+                if (copyMap[nx][ny] == 0) {
+                    copyMap[nx][ny] = 2;
+                    q.add(new State(nx, ny));
+                }
+            }
+        }
+
+        int area = 0; //안전영역 세기
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (copyMap[i][j] == 0) {
+                    area++;
+                }
+            }
+        }
+
+        safeArea = Math.max(safeArea, area);
+    }
+
+    private static void DFS(int walls) {
+        if (walls == 3) { //벽을 3개 세우면 바이러스 감염 및 안전영역 세기
+            countSafeArae();
             return;
         }
- 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
                 if (map[i][j] == 0) {
                     map[i][j] = 1;
-                    dfs(depth + 1);
-                    map[i][j] = 0;
+                    DFS(walls + 1);
+                    map[i][j] = 0; //세웠던 벽을 다시 허뭄
                 }
             }
         }
     }
- 
-    public static void bfs() {
-        int[][] virus_map = new int[n][m];
-        Queue<virus> queue = new ArrayDeque<>();
- 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                virus_map[i][j] = map[i][j];
-            }
+
+    private static class State {
+        public final int x;
+        public final int y;
+
+        public State(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
- 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (virus_map[i][j] == 2) {
-                    queue.add(new virus(i, j));
-                }
-            }
-        }
- 
-        while (!queue.isEmpty()) {
-            virus poll = queue.poll();
-            for (int i = 0; i < 4; i++) {
-                int ny = poll.y + y[i];
-                int nx = poll.x + x[i];
-                if (ny >= 0 && nx >= 0 && ny < n && nx < m) {
-                    if (virus_map[ny][nx] == 0) {
-                        virus_map[ny][nx] = 2;
-                        queue.add(new virus(ny, nx));
-                    }
-                }
-            }
-        }
-        count(virus_map);
-    }
- 
-    public static void count(int[][] virus_map) {
-        int temp = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (virus_map[i][j] == 0) {
-                    temp++;
-                }
-            }
-        }
-        result = Math.max(result, temp);
     }
 }
- 
