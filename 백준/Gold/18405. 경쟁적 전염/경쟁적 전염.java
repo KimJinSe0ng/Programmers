@@ -1,104 +1,76 @@
-import java.util.*;
-
-class Virus implements Comparable<Virus> {
-
-    private int index;
-    private int second;
-    private int x;
-    private int y;
-
-    public Virus(int index, int second, int x, int y) {
-        this.index = index;
-        this.second = second;
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getIndex() {
-        return this.index;
-    }
-
-    public int getSecond() {
-        return this.second;
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
-    }
-
-    // 정렬 기준은 '번호가 낮은 순서'
-    @Override
-    public int compareTo(Virus other) {
-        if (this.index < other.index) {
-            return -1;
-        }
-        return 1;
-    }
-}
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
 public class Main {
+    static int N, K, S, X, Y;
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
+    static int[][] map;
+    static PriorityQueue<Virus> queue = new PriorityQueue<>();
+    static int second = 0;
 
-    public static int n, k;
-    // 전체 보드 정보를 담는 배열
-    public static int[][] graph = new int[200][200];
-    public static ArrayList<Virus> viruses = new ArrayList<Virus>();
-    
-    // 바이러스가 퍼져나갈 수 있는 4가지의 위치
-    public static int[] dx = {-1, 0, 1, 0};
-    public static int[] dy = {0, 1, 0, -1};
+    private static class Virus implements Comparable<Virus> {
+        public final int x;
+        public final int y;
+        public final int value;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        public Virus(int x, int y, int value) {
+            this.x = x;
+            this.y = y;
+            this.value = value;
+        }
 
-        n = sc.nextInt();
-        k = sc.nextInt();
+        @Override
+        public int compareTo(Virus other) {
+            return Integer.compare(this.value, other.value);
+        }
+    }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                graph[i][j] = sc.nextInt();
-                // 해당 위치에 바이러스가 존재하는 경우
-                if (graph[i][j] != 0) {
-                    // (바이러스 종류, 시간, 위치 X, 위치 Y) 삽입
-                    viruses.add(new Virus(graph[i][j], 0, i, j));
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        map = new int[N][N];
+
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
+                if (map[i][j] != 0) {
+                    queue.add(new Virus(i, j, map[i][j]));
                 }
             }
         }
 
-        // 정렬 이후에 큐로 옮기기 (낮은 번호의 바이러스가 먼저 증식하므로)
-        Collections.sort(viruses);
-        Queue<Virus> q = new LinkedList<Virus>();
-        for (int i = 0; i < viruses.size(); i++) {
-            q.offer(viruses.get(i));
-        }
+        st = new StringTokenizer(br.readLine());
+        S = Integer.parseInt(st.nextToken());
+        X = Integer.parseInt(st.nextToken());
+        Y = Integer.parseInt(st.nextToken());
 
-        int targetS = sc.nextInt();
-        int targetX = sc.nextInt();
-        int targetY = sc.nextInt();
-
-        // 너비 우선 탐색(BFS) 진행
-        while (!q.isEmpty()) {
-            Virus virus = q.poll();
-            // 정확히 second만큼 초가 지나거나, 큐가 빌 때까지 반복
-            if (virus.getSecond() == targetS) break;
-            // 현재 노드에서 주변 4가지 위치를 각각 확인
-            for (int i = 0; i < 4; i++) {
-                int nx = virus.getX() + dx[i];
-                int ny = virus.getY() + dy[i];
-                // 해당 위치로 이동할 수 있는 경우
-                if (0 <= nx && nx < n && 0 <= ny && ny < n) {
-                    // 아직 방문하지 않은 위치라면, 그 위치에 바이러스 넣기
-                    if (graph[nx][ny] == 0) {
-                        graph[nx][ny] = virus.getIndex();
-                        q.offer(new Virus(virus.getIndex(), virus.getSecond() + 1, nx, ny));
+        for (int s = 0; s < S; s++) {
+            if (queue.isEmpty()) break;
+            int size = queue.size();
+            PriorityQueue<Virus> nextQueue = new PriorityQueue<>();
+            while (size-- > 0) {
+                Virus now = queue.poll();
+                for (int d = 0; d < 4; d++) {
+                    int nx = now.x + dx[d];
+                    int ny = now.y + dy[d];
+                    if (nx >= 0 && nx < N && ny >= 0 && ny < N) {
+                        if (map[nx][ny] == 0) {
+                            map[nx][ny] = now.value;
+                            nextQueue.add(new Virus(nx, ny, now.value));
+                        }
                     }
                 }
             }
+            queue = nextQueue;
         }
 
-        System.out.println(graph[targetX - 1][targetY - 1]);
+        System.out.println(map[X - 1][Y - 1]);
     }
 }
