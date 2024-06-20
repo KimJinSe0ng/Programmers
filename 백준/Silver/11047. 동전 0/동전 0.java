@@ -1,44 +1,32 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int N, K, minCnt;
-    static ArrayList<Integer> Val;
+    static int N, K;
+    static int[] coins;
+    static int count = 0;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
+        coins = new int[N];
 
-        Val = new ArrayList<>();
-        for(int i = 0; i < N; i++){
-            int value = Integer.parseInt(br.readLine());
-            if(K - value > 0){
-                Val.add(value);
-            } else if(K - value < 0){
-            } else{
-                minCnt = 1;
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            coins[i] = Integer.parseInt(st.nextToken());
+        }
+
+        for (int i = coins.length - 1; i >= 0; i--) {
+            if (coins[i] <= K) {
+                count += K / coins[i];
+                K = K % coins[i];
             }
         }
 
-        if(minCnt == 1){
-            System.out.println(minCnt);
-            return;
-        }
-        minCnt = 0;
-
-        for(int i = Val.size()-1; i >= 0; i--) {
-            if (K - Val.get(i) >= 0) {
-                minCnt += (K / Val.get(i));
-                K -= Val.get(i) * (K / Val.get(i));
-            }
-            if(K == 0){
-                break;
-            }
-        }
-        System.out.println(minCnt);
+        System.out.println(count);
     }
 }
