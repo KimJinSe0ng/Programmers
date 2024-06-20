@@ -1,58 +1,84 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
     static int N, M, K, X;
+    static boolean[] visited;
     static ArrayList<Integer>[] A;
-    static int[] visited = new int[300001];
+    static boolean isFind = false;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        M = sc.nextInt();
-        K = sc.nextInt();
-        X = sc.nextInt();
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        X = Integer.parseInt(st.nextToken());
 
+        visited = new boolean[N + 1];
         A = new ArrayList[N + 1];
-//        visited = new int[N + 1];
-//        Arrays.fill(visited, -1);
-        for (int i = 0; i <= N; i++) {
+
+        for (int i = 1; i <= N; i++) {
             A[i] = new ArrayList<>();
-            visited[i] = -1;
         }
 
         for (int i = 0; i < M; i++) {
-            int s = sc.nextInt();
-            int e = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
             A[s].add(e);
-            //A[e].add(s);
+//            A[e].add(s); //단방향 그래프
         }
 
-        bfs(X);
+        BFS(X);
+
+        if (!isFind) {
+            System.out.println(-1);
+        }
     }
 
-    private static void bfs(int v) {
-        Queue<Integer> q = new LinkedList<>();
-        q.add(v);
-        visited[v] = 0;
-        while (!q.isEmpty()) {
-            int now = q.poll();
-            for (int next : A[now]) {
-                if (visited[next] == -1) {
-                    visited[next] = visited[now] + 1;
-                    q.add(next);
+    private static void BFS(int start) {
+        Queue<State> queue = new LinkedList<>();
+        queue.add(new State(start, 0));
+        visited[start] = true;
+        ArrayList<Integer> result = new ArrayList<>();
+
+        while (!queue.isEmpty()) {
+            State now = queue.poll();
+
+            if (now.depth == K) {
+                isFind = true;
+                result.add(now.node);
+            }
+
+            for (int next : A[now.node]) {
+                if (!visited[next]) {
+                    queue.add(new State(next, now.depth + 1));
+                    visited[next] = true;
                 }
             }
         }
 
-        boolean check = false;
-        for (int i = 1; i <= N; i++) {
-            if (visited[i] == K) {
-                System.out.println(i);
-                check = true;
+        if (isFind) {
+            result.sort(null);
+            for (int node : result) {
+                System.out.println(node);
             }
         }
-
-        if (!check) System.out.println(-1);
     }
 
+    private static class State {
+        public final int node;
+        public final int depth;
+
+        public State(int node, int depth) {
+            this.node = node;
+            this.depth = depth;
+        }
+    }
 }
