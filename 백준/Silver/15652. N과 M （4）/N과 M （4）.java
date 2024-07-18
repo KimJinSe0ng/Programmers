@@ -4,39 +4,40 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-
-    static StringBuilder sb = new StringBuilder();
-    static int n, m;
-    static boolean[] visit;
-    static int[] arr;
-
+    public static int[] arr;
+    public static int N, M;
+    public static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
 
-        visit = new boolean[n];
-        arr = new int[m];
-        dfs(0, 0);
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        arr = new int[M];
+
+        dfs(1, 0);
         System.out.println(sb);
+
     }
 
-    private static void dfs(int depth, int start) {
-        if (depth == m) {
+    public static void dfs(int at, int depth) {
+
+        if (depth == M) {
             for (int val : arr) {
-                sb.append(val).append(" ");
+                sb.append(val).append(' ');
             }
-            sb.append("\n");
+            sb.append('\n');
             return;
         }
 
-        for (int i = start; i < n; i++) {
-            visit[i] = true;
-            arr[depth] = i + 1;
-            dfs(depth + 1, i);
-            visit[i] = false;
+        for (int i = at; i <= N; i++) {
+
+            arr[depth] = i;
+            dfs(i, depth + 1);
+
         }
     }
 }
