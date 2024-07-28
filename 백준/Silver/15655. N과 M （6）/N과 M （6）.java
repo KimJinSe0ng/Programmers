@@ -5,48 +5,54 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    static StringBuilder sb = new StringBuilder();
-    static int n, m;
-    static boolean[] visit;
-    static int[] arr;
-    static int[] input;
-
+    public static int[] A;
+    public static int[] nums;
+    public static boolean[] visited;
+    public static int N, M;
+    public static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        A = new int[M];
+        nums = new int[N];
+        visited = new boolean[10001];
 
         st = new StringTokenizer(br.readLine());
-        input = new int[n];
-        for(int i=0;i<n;i++){
-            input[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            nums[i] = Integer.parseInt(st.nextToken());
         }
-        Arrays.sort(input);
 
-        visit = new boolean[n];
-        arr = new int[m];
-        dfs(0,0);
+        Arrays.sort(nums);
+
+        recur(0);
         System.out.println(sb);
+
     }
 
-    private static void dfs(int depth, int start) {
-        if (depth == m) {
-            for (int val : arr) {
-                sb.append(val).append(" ");
+    public static void recur(int depth) {
+        if (depth == M) {
+            for (int val : A) {
+                sb.append(val).append(' ');
             }
-            sb.append("\n");
+            sb.append('\n');
             return;
         }
 
-        for (int i = start; i < n; i++) {
-            if (!visit[i]) {
-                visit[i] = true;
-                arr[depth] = input[i];
-                dfs(depth + 1,i);
-                visit[i] = false;
+        for (int i = 0; i < N; i++) {
+            if (visited[nums[i]]) {
+                continue;
+            }
+            visited[nums[i]] = true;
+            A[depth] = nums[i];
+            recur(depth + 1);
+            for (int j = i + 1; j < N; j++) {
+                visited[nums[j]] = false;
             }
         }
     }
