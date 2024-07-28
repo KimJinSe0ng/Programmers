@@ -1,57 +1,58 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int[][] arr = new int[n][2];
-        int[] arr_y = new int[n];
-        int[] arr_x = new int[n];
-        int[] answer = new int[n];
-        Arrays.fill(answer, -1);
+public class Main { //메모리 초과
+    static int N;
+    static int[][] checkers;
+    static int[] answer;
 
-        // 입력 받기
-        for (int i = 0; i < n; i++) {
-            int a = scanner.nextInt();
-            int b = scanner.nextInt();
-            arr[i][0] = a;
-            arr[i][1] = b;
-            arr_y[i] = b;
-            arr_x[i] = a;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        checkers = new int[N][2];
+        answer = new int[N];
+        int[] arr_x = new int[N]; //x좌표
+        int[] arr_y = new int[N]; //y좌표
+        Arrays.fill(answer, -1);
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            checkers[i][0] = Integer.parseInt(st.nextToken());
+            checkers[i][1] = Integer.parseInt(st.nextToken());
+            arr_x[i] = checkers[i][0];
+            arr_y[i] = checkers[i][1];
         }
 
-        // 만날 장소 정하기
-        for (int y : arr_y) {
-            for (int x : arr_x) {
-                List<Integer> dist = new ArrayList<>();
-
-                // 만날 장소로 각각의 점들이 오는 비용 계산하기
-                for (int[] point : arr) {
-                    int ex = point[0];
-                    int ey = point[1];
-                    int d = Math.abs(ex - x) + Math.abs(ey - y);
-                    dist.add(d);
+        int[] tmp = new int[N];
+        for (int x : arr_x) { //모든 좌표 탐색
+            for (int y : arr_y) {
+                for (int i = 0; i < checkers.length; i++) {
+                    tmp[i] = Math.abs(x - checkers[i][0]) + Math.abs(y - checkers[i][1]); //거리 비용
                 }
 
-                // 가까운 순서대로 정렬하기
-                Collections.sort(dist);
+                Arrays.sort(tmp);
 
-                int tmp = 0;
-                for (int i = 0; i < dist.size(); i++) {
-                    int d = dist.get(i);
-                    tmp += d;
+                int sum = 0;
+                for (int i = 0; i < tmp.length; i++) {
+                    sum += tmp[i];
                     if (answer[i] == -1) {
-                        answer[i] = tmp;
+                        answer[i] = sum;
                     } else {
-                        answer[i] = Math.min(tmp, answer[i]);
+                        answer[i] = Math.min(answer[i], sum);
                     }
                 }
             }
         }
 
-        // 결과 출력
-        for (int i = 0; i < n; i++) {
-            System.out.print(answer[i] + " ");
+        for (int i : answer) {
+            sb.append(i).append(" ");
         }
+
+        System.out.println(sb.toString().trim());
     }
+
 }
