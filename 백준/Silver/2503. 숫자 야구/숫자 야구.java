@@ -7,9 +7,11 @@ public class Main {
     static int N;
     static int[][] hints;
     static int answer = 0;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         hints = new int[N][3];
 
@@ -20,61 +22,61 @@ public class Main {
             hints[i][2] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = 1; i < 10; i++) { //1~9 : 100의자리
-            for (int j = 1; j < 10; j++) { //10의자리
-                for (int k = 1; k < 10; k++) { //1의자리
-                    if (i == j || j == k || k == i) { //숫자 중복은 패스
-                        continue;
-                    }
-
-                    int count = 0;
-
-                    for (int[] hint : hints) {
-                        int number = hint[0];
-                        int strike = hint[1];
-                        int ball = hint[2];
-
-                        int strike_count = 0;
-                        int ball_count = 0;
-
-                        int guess1 = i;
-                        int guess2 = j;
-                        int guess3 = k;
-                        int num1 = number / 100; //100의자리
-                        int num2 = (number / 10) % 10; //10의자리
-                        int num3 = number % 10; //1의자리
-
-                        if (num1 == guess1) {
-                            strike_count++;
-                        }
-                        if (num2 == guess2) {
-                            strike_count++;
-                        }
-                        if (num3 == guess3) {
-                            strike_count++;
-                        }
-
-                        if (num1 == guess2 || num1 == guess3) {
-                            ball_count++;
-                        }
-                        if (num2 == guess1 || num2 == guess3) {
-                            ball_count++;
-                        }
-                        if (num3 == guess1 || num3 == guess2) {
-                            ball_count++;
-                        }
-
-                        if (strike_count == strike && ball_count == ball) {
-                            count++;
-                        }
-                    }
-
-                    if (count == N) {
-                        answer++;
-                    }
-                }
-            }
-        }
+        recur(0, 100);
         System.out.println(answer);
+    }
+
+    private static boolean checker(int idx, int number) {
+        int _number = hints[idx][0];
+        int _strike = hints[idx][1];
+        int _ball = hints[idx][2];
+
+        int strike = 0;
+        int ball = 0;
+
+        int _A = _number / 100;
+        int _B = (_number % 100) / 10;
+        int _C = _number % 10;
+
+        int A = number / 100;
+        int B = (number % 100) / 10;
+        int C = number % 10;
+
+        if (A == 0 || B == 0 || C == 0) {
+            return false;
+        }
+
+        if (A == B || A == C || B == C) {
+            return false;
+        }
+
+        if (A == _A) strike++;
+        if (B == _B) strike++;
+        if (C == _C) strike++;
+
+        if (A == _B || A == _C) ball++;
+        if (B == _A || B == _C) ball++;
+        if (C == _A || C == _B) ball++;
+
+        return strike == _strike && ball == _ball;
+
+    }
+
+    private static void recur(int idx, int num) {
+        if (idx == N) {
+            answer++;
+            recur(0, num + 1); //정답의 개수가 1개 이상일 수 있으니 계속 탐색
+            return;
+        }
+
+        if (num == 1000) {
+            return;
+        }
+
+        if (checker(idx, num)) { //힌트를 통과했다면
+            recur(idx + 1, num);
+        } else {
+            recur(0, num + 1);
+        }
     }
 }
