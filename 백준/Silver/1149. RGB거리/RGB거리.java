@@ -1,27 +1,46 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
+    static int N;
+    static int[][] colors;
+    static int[][] dp;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        colors = new int[N + 1][3];
+        dp = new int[N + 1][3];
 
-        int n = Integer.parseInt(br.readLine());
-
-        int[][] dp = new int[n + 1][3];
-
-        for (int i = 1; i <= n; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int r = Integer.parseInt(st.nextToken());
-            int g = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-
-            dp[i][0] = Math.min(dp[i - 1][1], dp[i - 1][2]) + r;
-            dp[i][1] = Math.min(dp[i - 1][0], dp[i - 1][2]) + g;
-            dp[i][2] = Math.min(dp[i - 1][0], dp[i - 1][1]) + b;
+        for (int i = 1; i <= N; i++) {
+            st = new StringTokenizer(br.readLine());
+            colors[i][0] = Integer.parseInt(st.nextToken());
+            colors[i][1] = Integer.parseInt(st.nextToken());
+            colors[i][2] = Integer.parseInt(st.nextToken());
         }
-        System.out.println(Math.min(dp[n][0], Math.min(dp[n][1], dp[n][2])));
 
+        for (int i = 0; i < 3; i++) { //첫 번째 집 초기화, 초기화를 하지 않는다면, 밑에 for문 idx = 1부터 시작
+            dp[1][i] = colors[1][i];
+        }
+
+        for (int idx = 2; idx <= N; idx++) {
+            for (int rgb = 0; rgb < 3; rgb++) {
+                if (rgb == 0) { //빨강을 칠한 상황에선 위에 빨강이 아닌 두 색상 중 작은 걸 비용으로 더해주겠다.
+                    dp[idx][rgb] = Math.min(dp[idx - 1][1], dp[idx - 1][2]) + colors[idx][rgb];
+                }
+                if (rgb == 1) { //초록
+                    dp[idx][rgb] = Math.min(dp[idx - 1][0], dp[idx - 1][2]) + colors[idx][rgb];
+                }
+                if (rgb == 2) { //파랑
+                    dp[idx][rgb] = Math.min(dp[idx - 1][0], dp[idx - 1][1]) + colors[idx][rgb];
+                }
+            }
+        }
+
+        int result = Math.min(Math.min(dp[N][0], dp[N][1]), dp[N][2]);
+        System.out.println(result);
     }
 }
