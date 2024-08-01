@@ -1,39 +1,45 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
- 
+import java.util.StringTokenizer;
+
 public class Main {
-	public int count(int N, int[] arr, int X) {
-		int result = 0;
-		int sum = 0;
-		int lt = 0;
-		int rt = N-1;
-		
-		Arrays.sort(arr);
-		
-		while(lt < rt) {
-			sum = arr[rt] + arr[lt];
-			
-			if(sum == X) result++;
-			
-			if(sum < X) {
-				lt++;
-			}else {
-				rt--;
-			}
-		}
-		return result;
-	}
-	
-	public static void main(String[] args) {
-		Main num = new Main();
-		Scanner sc = new Scanner(System.in);
-		int N = sc.nextInt();
-		int[] arr = new int[N];
-		for(int i=0; i<N; i++) {
-			arr[i] = sc.nextInt();
-		}
-		int X = sc.nextInt();
-		
-		System.out.println(num.count(N, arr, X));
-	}
+    static int N;
+    static int[] A;
+    static int X;
+    static int count = 0;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        A = new int[N];
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            A[i] = Integer.parseInt(st.nextToken());
+        }
+
+        st = new StringTokenizer(br.readLine());
+        X = Integer.parseInt(st.nextToken());
+
+        Arrays.sort(A);
+
+        int s = 0;
+        int e = N - 1;
+
+        while (s < e) {
+            if (A[s] + A[e] == X) {
+                count++;
+                e -= 1;
+            } else if (A[s] + A[e] > X) {
+                e -= 1;
+            } else {
+                s += 1;
+            }
+        }
+
+        System.out.println(count);
+    }
 }
