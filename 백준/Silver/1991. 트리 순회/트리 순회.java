@@ -1,57 +1,62 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-	static int N;
-	static int tree[][];
-	
-	// 전위 순회
-	static void preorder_traverse(int node) {
-		if (node == -19) return; // '.'인 경우 종료
-		System.out.print((char)(node+65)); // 노드 출력
-		preorder_traverse(tree[node][0]); // 왼쪽 자식 순회
-		preorder_traverse(tree[node][1]); // 오른쪽 자식 순회
-	}
-	
-	// 중위 순회
-	static void inorder_traverse(int node) {
-		if (node == -19) return; // '.'인 경우 종료
-		inorder_traverse(tree[node][0]); // 왼쪽 자식 순회
-		System.out.print((char)(node+65)); // 노드 출력
-		inorder_traverse(tree[node][1]); // 오른쪽 자식 순회
-	}
-	
-	// 후위 순회
-	static void postorder_traverse(int node) {
-		if (node == -19) return; // '.'인 경우 종료
-		postorder_traverse(tree[node][0]); // 왼쪽 자식 순회
-		postorder_traverse(tree[node][1]); // 오른쪽 자식 순회
-		System.out.print((char)(node+65)); // 노드 출력
-	}
+    static List<List<Integer>> tree = new ArrayList<>();
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(bf.readLine());
-		
-		// 노드 개수 입력
-		N = Integer.parseInt(st.nextToken());
-		tree = new int [26][2];
-		
-		// 노드 입력
-		for(int i=0; i<N; i++) {
-			st = new StringTokenizer(bf.readLine());
-			int idx = (int)st.nextToken().charAt(0) - 65;
-			tree[idx][0] = (int)st.nextToken().charAt(0) - 65;
-			tree[idx][1] = (int)st.nextToken().charAt(0) - 65;
-		}
-		
-		preorder_traverse(0);
-		System.out.println();
-		inorder_traverse(0);
-		System.out.println();
-		postorder_traverse(0);
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int n = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i <= n; i++) {
+            tree.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < n; i++) {
+            String[] input = br.readLine().split(" ");
+            int a = input[0].charAt(0) - 'A' + 1;
+            int b = input[1].charAt(0) - 'A' + 1;
+            int c = input[2].charAt(0) - 'A' + 1;
+
+            tree.get(a).add(b);
+            tree.get(a).add(c);
+        }
+
+        preOrder(1);
+        System.out.println();
+        inOrder(1);
+        System.out.println();
+        postOrder(1);
+    }
+
+    // 전위 순회
+    public static void preOrder(int start) {
+        if (start != -18) {
+            System.out.print((char)(start + 'A' - 1));
+            preOrder(tree.get(start).get(0));
+            preOrder(tree.get(start).get(1));
+        }
+    }
+
+    // 중위 순회
+    public static void inOrder(int start) {
+        if (start != -18) {
+            inOrder(tree.get(start).get(0));
+            System.out.print((char)(start + 'A' - 1));
+            inOrder(tree.get(start).get(1));
+        }
+    }
+
+    // 후위 순회
+    public static void postOrder(int start) {
+        if (start != -18) {
+            postOrder(tree.get(start).get(0));
+            postOrder(tree.get(start).get(1));
+            System.out.print((char)(start + 'A' - 1));
+        }
+    }
 }
