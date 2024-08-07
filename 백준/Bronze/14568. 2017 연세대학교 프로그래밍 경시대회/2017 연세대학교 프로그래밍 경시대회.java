@@ -1,19 +1,25 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        int count = 0;
+    static int N;
+    static int answer = 0;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
 
-        for (int a = 0; a < N; a++) { //택희
-            for (int b = 0; b < N; b++) { //영훈
-                for (int c = 0; c < N; c++) { //남규
-                    if (c >= b + 2) {
-                        if (a != 0 && b != 0 && c != 0) {
-                            if (a % 2 != 1) {
-                                if (a + b + c == N) {
-                                    count++;
+        for (int t = 0; t <= N; t++) { //택희
+            for (int y = 0; y <= N; y++) { //영훈
+                for (int n = 0; n <= N; n++) { //남규
+                    if (t + y + n == N) {
+                        if (n >= y + 2) {
+                            if (t != 0 && y != 0 && n != 0) {
+                                if (t % 2 != 1) {
+                                    answer++;
                                 }
                             }
                         }
@@ -22,6 +28,6 @@ public class Main {
             }
         }
 
-        System.out.println(count);
+        System.out.println(answer);
     }
 }
