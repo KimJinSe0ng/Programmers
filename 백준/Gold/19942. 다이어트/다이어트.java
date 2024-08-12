@@ -1,68 +1,67 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
+import java.io.*;
 
 public class Main {
     static int N;
     static int[] necessary;
-    static int[][] ingredient;
+    static int[][] items;
     static int answer = Integer.MAX_VALUE;
-    static List<Integer> used = new ArrayList<>();
-    static List<Integer> answerUsed = new ArrayList<>();
+    static ArrayList<Integer> use;
+    static ArrayList<Integer> answer_use = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
-        ingredient = new int[N][5];
         necessary = new int[4];
+        items = new int[N][5];
+        use = new ArrayList<>();
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < necessary.length; i++) {
+        for (int i = 0; i < 4; i++) {
             necessary[i] = Integer.parseInt(st.nextToken());
         }
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            ingredient[i][0] = Integer.parseInt(st.nextToken());
-            ingredient[i][1] = Integer.parseInt(st.nextToken());
-            ingredient[i][2] = Integer.parseInt(st.nextToken());
-            ingredient[i][3] = Integer.parseInt(st.nextToken());
-            ingredient[i][4] = Integer.parseInt(st.nextToken());
+            items[i][0] = Integer.parseInt(st.nextToken());
+            items[i][1] = Integer.parseInt(st.nextToken());
+            items[i][2] = Integer.parseInt(st.nextToken());
+            items[i][3] = Integer.parseInt(st.nextToken());
+            items[i][4] = Integer.parseInt(st.nextToken());
         }
 
         recur(0, 0, 0, 0, 0, 0);
-        
-        if (!answerUsed.isEmpty()) {
-            Collections.sort(answerUsed);
+
+        if (!answer_use.isEmpty()) {
+            Collections.sort(answer_use);
             System.out.println(answer);
-            for (int idx : answerUsed) {
-                System.out.print((idx + 1) + " ");
+            for (Integer idx : answer_use) {
+                System.out.printf("%d ", idx + 1);
             }
         } else {
             System.out.println(-1);
         }
     }
 
-    private static void recur(int idx, int mp, int mf, int ms, int mv, int price) {
-        if (mp >= necessary[0] && mf >= necessary[1] && ms >= necessary[2] && mv >= necessary[3]) {
+    private static void recur(int idx, int dan, int zi, int tan, int bi, int price) {
+        if (dan >= necessary[0] && zi >= necessary[1] && tan >= necessary[2] && bi >= necessary[3]) {
             if (answer > price) {
                 answer = price;
-                answerUsed = new ArrayList<>(used);
+                answer_use = new ArrayList<>(use);
             }
         }
-
-        if (idx == N) { //모든 재료를 사용한 경우
+        if (idx == N) { //모든 재료를 다 사용했다면
             return;
         }
 
-        //재료를 사용한 경우
-        used.add(idx);
-        recur(idx + 1, mp + ingredient[idx][0], mf + ingredient[idx][1], ms + ingredient[idx][2], mv + ingredient[idx][3], price + ingredient[idx][4]);
-        used.remove(used.size() - 1);
-        //재료를 사용하지 않은 경우
-        recur(idx + 1, mp, mf, ms, mv, price);
+        //현재 재료를 선택한 경우
+        use.add(idx);
+        recur(idx + 1, dan + items[idx][0], zi + items[idx][1], tan + items[idx][2], bi + items[idx][3], price + items[idx][4]);
+        use.remove(use.size() - 1);
+        //현재 재료를 선택하지 않은 경우
+        recur(idx + 1, dan, zi, tan, bi, price);
+
     }
 }
