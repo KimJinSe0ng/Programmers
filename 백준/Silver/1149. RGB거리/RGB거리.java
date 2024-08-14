@@ -1,13 +1,10 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
+import java.io.*;
 
 public class Main {
     static int N;
     static int[][] colors;
     static int[][] dp;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -27,14 +24,14 @@ public class Main {
         }
 
         for (int idx = 2; idx <= N; idx++) {
-            for (int rgb = 0; rgb < 3; rgb++) {
-                if (rgb == 0) { //빨강을 칠한 상황에선 위에 빨강이 아닌 두 색상 중 작은 걸 비용으로 더해주겠다.
+            for (int rgb = 0; rgb < 3; rgb++) { //rgb는 현재 선택한 색상
+                if (rgb == 0) { //현재 빨강을 칠한 상황에선 나머지 비용 중 작은 걸 비용으로 합치겠다.
                     dp[idx][rgb] = Math.min(dp[idx - 1][1], dp[idx - 1][2]) + colors[idx][rgb];
                 }
-                if (rgb == 1) { //초록
+                if (rgb == 1) {
                     dp[idx][rgb] = Math.min(dp[idx - 1][0], dp[idx - 1][2]) + colors[idx][rgb];
                 }
-                if (rgb == 2) { //파랑
+                if (rgb == 2) {
                     dp[idx][rgb] = Math.min(dp[idx - 1][0], dp[idx - 1][1]) + colors[idx][rgb];
                 }
             }
@@ -42,5 +39,6 @@ public class Main {
 
         int result = Math.min(Math.min(dp[N][0], dp[N][1]), dp[N][2]);
         System.out.println(result);
+
     }
 }
