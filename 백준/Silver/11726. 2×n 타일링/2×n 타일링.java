@@ -1,15 +1,22 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        long[] D = new long[1001];
-        D[1] = 1; //길이가 2*1일 때 타일의 경우의 수
-        D[2] = 2; //길이가 2*2일 때 타일의 경우의 수
+    static int N;
+    static int[] dp;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        dp = new int[1001];
+        dp[1] = 1;
+        dp[2] = 2;
         for (int i = 3; i <= N; i++) {
-            D[i] = (D[i - 1] + D[i - 2]) % 10007; //점화식이 덧셈으로만 이루어져 있다면 다 하고 mod연산하나 하면서 mod해도 똑같음
+            dp[i] = (dp[i - 1] + dp[i - 2]) % 10007;
         }
-        System.out.println(D[N]);
+        System.out.println(dp[N]);
     }
 }
