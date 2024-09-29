@@ -6,4 +6,5 @@ FROM
 WHERE
     NAME LIKE '%el%'
     AND ANIMAL_TYPE = 'Dog'
-ORDER BY NAME;
+ORDER BY
+    NAME;
