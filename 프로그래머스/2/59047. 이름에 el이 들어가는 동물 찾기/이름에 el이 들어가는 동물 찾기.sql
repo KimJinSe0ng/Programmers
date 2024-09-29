@@ -4,7 +4,7 @@ SELECT
 FROM
     ANIMAL_INS
 WHERE
-    NAME LIKE '%el%'
+    LOWER(NAME) LIKE '%el%'
     AND ANIMAL_TYPE = 'Dog'
 ORDER BY
     NAME;
