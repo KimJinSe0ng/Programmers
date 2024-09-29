@@ -1,4 +1,4 @@
 SELECT
-    COUNT(*) AS 'count'
+    COUNT(ANIMAL_ID) AS COUNT
 FROM
-    ANIMAL_INS;
+    ANIMAL_INS
