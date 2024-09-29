@@ -6,4 +6,5 @@ FROM
     ANIMAL_INS
 WHERE
     NAME IN ('Lucy', 'Ella', 'Pickle', 'Rogan', 'Sabrina', 'Mitty')
-ORDER BY ANIMAL_ID;
+ORDER BY
+    ANIMAL_ID;
