@@ -31,6 +31,7 @@ public class Main {
             sb.append("\n");
             return;
         }
+
         for (int i = 1; i <= N; i++) {
             if (visited[i]) {
                 continue;
@@ -39,7 +40,6 @@ public class Main {
             A.add(i);
             recur(len + 1);
             A.remove(A.size() - 1);
-//            visited[i] = false;
             for (int j = i + 1; j <= N; j++) {
                 visited[j] = false;
             }
