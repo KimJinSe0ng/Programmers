@@ -24,19 +24,18 @@ public class Main {
         System.out.println(answer);
     }
 
-    private static void recur(int idx, int sour, int bitter, int use) {
-        if (idx == N) { //재료를 다 썼으면 종료
-            if (use == 0) { //재료를 하나도 사용하지 않은 경우 종료
+    private static void recur(int idx, int s, int b, int used) {
+        if (idx == N) {
+            if (used == 0) {
                 return;
             }
-            int diff = Math.abs(sour - bitter);
-            answer = Math.min(diff, answer);
+            answer = Math.min(answer, Math.abs(s - b));
             return;
         }
 
         //재료를 사용한 경우
-        recur(idx + 1, sour * items[idx][0], bitter + items[idx][1], use + 1);
-        //재료를 쓰지 않은 경우 : 다음 재료 선택
-        recur(idx + 1, sour, bitter, use);
+        recur(idx + 1, s * items[idx][0], b + items[idx][1], used + 1);
+        //재료를 사용하지 않은 경우
+        recur(idx + 1, s, b, used);
     }
 }
