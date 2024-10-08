@@ -1,9 +1,15 @@
+import java.util.*;
+
 class Solution {
     public int solution(String my_string, String is_prefix) {
-        int answer = 0;
-        if(my_string.startsWith(is_prefix)){
-            answer = 1;
+        ArrayList<String> arr = new ArrayList<>();
+        for(int i = 0; i < my_string.length(); i++) {
+            arr.add(my_string.substring(0, i));
         }
-        return answer;
+        if(arr.contains(is_prefix)) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
