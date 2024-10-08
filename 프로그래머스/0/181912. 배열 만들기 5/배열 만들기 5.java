@@ -2,15 +2,14 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String[] intStrs, int k, int s, int l) {
-        List<Integer> result = new ArrayList<>();
-        
-        for (String str : intStrs) {
-            int i = Integer.parseInt(str.substring(s, s + l));
-            if (i > k) {
-                result.add(i);
+        ArrayList<Integer> answer = new ArrayList<>();
+        for(int i = 0; i < intStrs.length; i++) {
+            int part = Integer.parseInt(intStrs[i].substring(s, s + l));
+            if(part > k) {
+                answer.add(part);
             }
         }
         
-        return result.stream().mapToInt(i->i).toArray();
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
