@@ -1,19 +1,28 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public int[] solution(int[] arr) {
-        int min = 100000, max = 0;
+        int firstIndex = -1;
+        int lastIndex = -1;
+
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == 2) {
-                min = Math.min(min, i);
-                max = Math.max(max, i);
+                if (firstIndex == -1) {
+                    firstIndex = i;
+                }
+                lastIndex = i;
             }
         }
 
-        if (min <= max) {
-            return Arrays.copyOfRange(arr, min, max + 1);
-        } else {
+        if (firstIndex == -1) {
             return new int[]{-1};
         }
+
+        int[] result = new int[lastIndex - firstIndex + 1];
+        for (int i = firstIndex; i <= lastIndex; i++) {
+            result[i - firstIndex] = arr[i];
+        }
+
+        return result;
     }
 }
