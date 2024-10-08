@@ -1,13 +1,19 @@
 import java.util.*;
+
 class Solution {
     public int[] solution(int[] arr, int[] query) {
-        for(int i =0; i<query.length; i++) {
-            if(i % 2 == 0) {
-                arr = Arrays.copyOfRange(arr, 0, query[i]+1);
-            }else {
-                arr = Arrays.copyOfRange(arr, query[i], arr.length);
+        List<Integer> list = new ArrayList<>();
+        for (int num : arr) {
+            list.add(num);
+        }
+
+        for (int i = 0; i < query.length; i++) {
+            if (i % 2 == 0) {
+                list = list.subList(0, query[i] + 1);
+            } else {
+                list = list.subList(query[i], list.size());
             }
         }
-        return arr;
+        return list.stream().mapToInt(Integer::intValue).toArray();
     }
 }
