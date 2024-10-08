@@ -1,16 +1,15 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public String[] solution(String my_string) {
-        int length = my_string.length();
-        String[] suffixes = new String[length];
-
-        for (int i = 0; i < length; i++) {
-            suffixes[i] = my_string.substring(i);
+        ArrayList<String> arr = new ArrayList<>();
+        
+        for(int i = 0; i < my_string.length(); i++) {
+            arr.add(my_string.substring(i));
         }
-
-        Arrays.sort(suffixes);
-
-        return suffixes;
+        
+        Collections.sort(arr);
+        
+        return arr.toArray(new String[0]);
     }
 }
