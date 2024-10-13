@@ -1,18 +1,16 @@
+import java.util.*;
+
 class Solution {
     public int[] solution(String my_string) {
-        int[] answer = new int[52];
-
-        
-        for (int i = 0; i < my_string.length(); i++) {
-            char c = my_string.charAt(i);
-
-            if (c >= 'A' && c <= 'Z') {
-                answer[c - 'A']++;
-            } else if (c >= 'a' && c <= 'z') {
-                answer[26 + c - 'a']++;
+        int[] arr = new int[52];
+        for (char ch : my_string.toCharArray()) {
+            System.out.println(ch - 'A');
+            if (ch >= 'A' && ch <= 'Z') {
+                arr[ch - 'A']++;
+            } else if (ch >= 'a' && ch <= 'z') {
+                arr[ch - 'a' + 26]++;
             }
         }
-
-        return answer;
+        return arr;
     }
 }
