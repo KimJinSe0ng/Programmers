@@ -1,5 +1,15 @@
 class Solution {
     public String solution(String myString) {
-        return myString.replaceAll("[a-k]", "l");
+        StringBuilder result = new StringBuilder();
+
+        for (char c : myString.toCharArray()) {
+            if (c < 'l') {
+                result.append('l');
+            } else {
+                result.append(c);
+            }
+        }
+
+        return result.toString();
     }
 }
