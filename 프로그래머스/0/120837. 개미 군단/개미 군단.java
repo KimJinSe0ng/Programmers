@@ -1,11 +1,13 @@
 class Solution {
     public int solution(int hp) {
-        int answer = 0;
-        answer += hp / 5;
-        hp %= 5;
-        answer += hp / 3;
-        hp %= 3;
-        answer += hp / 1;
-        return answer;
+        //장군: 5, 병정: 3, 일: 1
+        int ant = 0;
+        ant += hp / 5;
+        hp = hp % 5;
+        ant += hp / 3;
+        hp = hp % 3;
+        ant += hp / 1;
+        hp = hp % 1;
+        return ant;
     }
 }
