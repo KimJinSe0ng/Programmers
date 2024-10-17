@@ -1,19 +1,16 @@
 import java.util.*;
 class Solution {
     public String solution(String my_string) {
-        List<Character> list = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        for(char c : my_string.toCharArray()) {
-            if(list.contains(c)) {
-                continue;
+        StringBuilder result = new StringBuilder();
+        Set<Character> seen = new HashSet<>();
+        
+        for (char ch : my_string.toCharArray()) {
+            if (!seen.contains(ch)) {
+                seen.add(ch);
+                result.append(ch);
             }
-            list.add(c);
         }
         
-        for(char c : list) {
-            sb.append(c);
-        }
-        
-        return sb.toString();
+        return result.toString();
     }
 }
