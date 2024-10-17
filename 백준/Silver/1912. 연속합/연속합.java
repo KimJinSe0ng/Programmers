@@ -8,30 +8,24 @@ public class Main {
     static int n;
     static int[] numbers;
     static int[] prefix;
+    static int max = Integer.MIN_VALUE;
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         numbers = new int[n];
+        prefix = new int[n + 1];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
             numbers[i] = Integer.parseInt(st.nextToken());
         }
 
-        prefix = new int[n + 1];
-        
-        Arrays.fill(prefix, -1001);
-
         for (int i = 0; i < n; i++) {
             prefix[i + 1] = Math.max(prefix[i] + numbers[i], numbers[i]);
+            max = Math.max(prefix[i + 1], max);
         }
 
-        int maxSum = Integer.MIN_VALUE;
-        for (int i = 1; i <= n; i++) {
-            maxSum = Math.max(maxSum, prefix[i]);
-        }
-
-        System.out.println(maxSum);
+        System.out.println(max);
     }
 }
