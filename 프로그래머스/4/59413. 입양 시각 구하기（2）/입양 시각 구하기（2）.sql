@@ -1,11 +1,26 @@
-SET
-    @hour := -1;
+WITH HOURS AS (
+    SELECT LEVEL - 1 AS HOUR
+    FROM DUAL
+    CONNECT BY LEVEL <= 24
+),
+AO_INFO AS (
+    SELECT
+        TO_NUMBER(TO_CHAR(DATETIME, 'HH24')) AS HOUR,
+        COUNT(ANIMAL_ID) AS COUNT
+    FROM
+        ANIMAL_OUTS
+    GROUP BY
+        TO_CHAR(DATETIME, 'HH24')
+    ORDER BY
+        HOUR
+)
+
 SELECT
-    (@hour := @hour + 1) AS 'HOUR',
-	(SELECT COUNT(*)
-     FROM ANIMAL_OUTS
-     WHERE HOUR(DATETIME) = @hour) AS 'COUNT'
+    H.HOUR,
+    NVL(AI.COUNT, 0) AS COUNT
 FROM
-    ANIMAL_OUTS
-WHERE
-    @hour < 23;
+    HOURS H
+LEFT JOIN
+    AO_INFO AI ON H.HOUR = AI.HOUR
+ORDER BY
+    H.HOUR;
