@@ -32,6 +32,7 @@ public class Main {
             for (int j = i + 1; j < W; j++) { //현재 블록 기준 모든 오른쪽 블록의 높이까지 검사
                 right = Math.max(height[j], right);
             }
+            
             if (height[i] < left && height[i] < right) {
                 result += Math.min(left, right) - height[i];
             }
