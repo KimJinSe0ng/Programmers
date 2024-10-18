@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -14,12 +13,14 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
+
         st = new StringTokenizer(br.readLine());
         M = Integer.parseInt(st.nextToken());
+
         network = new ArrayList[N + 1];
         visited = new boolean[N + 1];
 
-        for (int i = 1; i < N + 1; i++) {
+        for (int i = 1; i <= N; i++) {
             network[i] = new ArrayList<>();
         }
 
@@ -37,12 +38,13 @@ public class Main {
 
     private static void dfs(int node) {
         visited[node] = true;
-        for (int v : network[node]) {
-            if (!visited[v]) {
-                visited[v] = true;
+        for (int next : network[node]) {
+            if (!visited[next]) {
+                visited[next] = true;
                 count++;
-                dfs(v);
+                dfs(next);
             }
         }
     }
+
 }
