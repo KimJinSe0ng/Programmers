@@ -33,31 +33,29 @@ public class Main {
         Arrays.sort(cards);
 
         for (int i = 0; i < guess.length; i++) {
-            int s = 0;
-            int e = N - 1;
-            boolean find = false;
-            while (s <= e) {
-                if (cards[s] == guess[i] || cards[e] == guess[i]) {
-                    find = true;
-                    break;
-                }
-                int mid = (s + e) / 2;
+            int l = 0;
+            int r = cards.length - 1;
+            boolean isFind = false;
 
-                if (cards[mid] > guess[i]) { //현재 값이 찾는 값 보다 크다면
-                    e = mid - 1;
-                } else if (cards[mid] < guess[i]) { //현재 값이 찾는 값 보다 작다면
-                    s = mid + 1;
-                } else { //현재 값이 찾는 값이면
-                    find = true;
+            while (l <= r) {
+
+                int mid = (l + r) / 2;
+
+                if (cards[mid] > guess[i]) {
+                    r = mid - 1;
+                } else if (cards[mid] < guess[i]) {
+                    l = mid + 1;
+                } else {
+                    isFind = true;
                     break;
                 }
             }
-            if (find) {
-                sb.append("1");
+
+            if (isFind) {
+                sb.append("1 ");
             } else {
-                sb.append("0");
+                sb.append("0 ");
             }
-            sb.append(" ");
         }
         System.out.println(sb.toString().trim());
     }
