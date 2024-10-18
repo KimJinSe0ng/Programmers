@@ -38,12 +38,11 @@ public class Main {
 
     public static void dfs(int node, int prev) {
         for (int next : tree[node]) {
-//            System.out.printf("node: %d -- next: %d, prev: %d\n", node, next, prev);
-            if (next == prev) {
+            if (next == prev) { // 역주행 제한
                 continue;
             }
             parent[next] = node; 
-            dfs(next, node);
+            dfs(next, node); 
         }
     }
 }
