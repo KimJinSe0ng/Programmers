@@ -9,11 +9,6 @@ public class Main {
     static long X;
     static long[] bottles;
 
-    /**
-     * Java에서는 배열의 크기나 인덱스는 int 타입으로 처리되기 때문에, long 타입으로 배열의 인덱스나 크기를 사용할 수는 없습니다.
-     * 다만, 배열의 요소가 long 타입인 것은 가능합니다.
-     * 코드에서 long 타입의 배열 요소를 사용하는 부분과 인덱스를 int 타입으로 처리하는 부분을 분리해야 합니다.
-     */
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -29,33 +24,31 @@ public class Main {
 
         Arrays.sort(bottles);
 
-        int s = 0;
-        int e = N - 1;
+        int l = 0;
+        int r = bottles.length - 1;
         int count = 0;
         int remain = 0;
 
-        while (s <= e) {
-            if (bottles[e] == X) {
+        while (l <= r) {
+            if (bottles[r] == X) {
                 count++;
-                e -= 1;
+                r--;
                 continue;
             }
 
-            if (s == e) {
+            if (l == r) {
                 remain++;
                 break;
             }
-
-            if (bottles[s] + bottles[e] >= X / 2.0) { //두 병 용량의 합이 총량의 절반에 가까우면, 남은 절반을 채워주기 때문에 꽉 채운 용기를 받을 수 있다.
-                count++;
-                e -= 1;
-                s += 1;
-            } else { //절반에 가깝지 않다면
-                s += 1;
+            if (bottles[l] + bottles[r] < X / 2.0) {
+                l++;
                 remain++;
+            } else {
+                r--;
+                l++;
+                count++;
             }
         }
-
         System.out.println(count + (remain / 3));
     }
 }
