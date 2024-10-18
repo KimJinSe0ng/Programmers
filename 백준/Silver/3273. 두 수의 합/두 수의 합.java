@@ -26,20 +26,18 @@ public class Main {
 
         Arrays.sort(A);
 
-        int s = 0;
-        int e = N - 1;
-
-        while (s < e) {
-            if (A[s] + A[e] == X) {
+        int left = 0;
+        int right = A.length - 1;
+        while (left < right) {
+            if (A[left] + A[right] == X) {
                 count++;
-                e -= 1;
-            } else if (A[s] + A[e] > X) {
-                e -= 1;
+            }
+            if (A[left] + A[right] >= X) {
+                right--;
             } else {
-                s += 1;
+                left++;
             }
         }
-
         System.out.println(count);
     }
 }
