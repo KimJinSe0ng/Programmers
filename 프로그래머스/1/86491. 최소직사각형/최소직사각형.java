@@ -1,22 +1,18 @@
+import java.util.*;
+
 class Solution {
     public int solution(int[][] sizes) {
-        int maxWidth = 0;
-        int maxHeight = 0;
-
-        for (int i = 0; i < sizes.length; i++) { //긴 부분을 가로로 재배치
-            if (sizes[i][0] < sizes[i][1]) {
-                int tmp = sizes[i][0];
-                sizes[i][0] = sizes[i][1];
-                sizes[i][1] = tmp;
-            }
-            if (maxWidth < sizes[i][0]) {
-                maxWidth = sizes[i][0];
-            }
-            if (maxHeight < sizes[i][1]) {
-                maxHeight = sizes[i][1];
-            }
+        int maxW = 0;
+        int maxH = 0;
+        for(int[] size : sizes) {
+            //가로와 세로 중 큰 값을 가로로, 작은 값을 세로로 설정
+            int w = Math.max(size[0], size[1]);
+            int h = Math.min(size[0], size[1]);
+            
+            maxW = Math.max(maxW, w);
+            maxH = Math.max(maxH, h);
         }
-
-        return maxWidth * maxHeight;
+        
+        return maxW * maxH;
     }
 }
