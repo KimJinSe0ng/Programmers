@@ -1,60 +1,51 @@
 import java.util.*;
 
 class Solution {
-    private static int answer;
-    private static boolean[] visit;
-    private static List<List<Integer>> list;
-    
     public int solution(int n, int[][] wires) {
-        answer = 987654321;
-        
-        for(int i = 0; i<wires.length; i++) {
-            bfs(i, n, wires); //끊을 선
+        List<List<Integer>> graph = new ArrayList<>();
+        for(int i = 0; i <= n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for(int i = 0; i < wires.length; i++) {
+            int s = wires[i][0];
+            int e = wires[i][1];
+            graph.get(s).add(e);
+            graph.get(e).add(s);
         }
         
-        return answer;
+        int minDifference = n;
+        
+        for(int[] wire : wires) {
+            int v1 = wire[0];
+            int v2 = wire[1];
+            
+            int nodeCount1 = bfs(v1, v2, graph, n);
+            int nodeCount2 = n - nodeCount1;
+            
+            minDifference = Math.min(minDifference, Math.abs(nodeCount1 - nodeCount2));
+        }
+        
+        return minDifference;
     }
     
-    private static void bfs(int idx, int n, int[][] wires) {
-        
-        list = new ArrayList<>();
-        for(int i = 0; i<n; i++) {
-            list.add(new ArrayList<>());
-        }
-        
-        for(int i = 0; i<wires.length; i++) {
-            if(i == idx) continue;
-            int a = wires[i][0];
-            int b = wires[i][1];
-            
-            list.get(a-1).add(b-1);
-            list.get(b-1).add(a-1);
-        }
-        
-        Queue<Integer> q = new ArrayDeque<>();
-        q.offer(0);
-        
-        visit = new boolean[n];
-        visit[0] = true;
+    //네트워크 노드 개수 구하기
+    private int bfs(int start, int ignore, List<List<Integer>> graph, int n) {
+        Queue<Integer> q = new LinkedList<>();
+        boolean[] visited = new boolean[n + 1];
+        q.add(start);
+        visited[start] = true;
+        int count = 1;
         
         while(!q.isEmpty()) {
-            int cur = q.poll();
-            
-            for(int o: list.get(cur)) {
-                if(!visit[o]) {
-                    visit[o] = true;
-                    q.offer(o);
-                }
+            int now = q.poll();
+            for(int neighbor : graph.get(now)) {
+                if(neighbor == ignore || visited[neighbor]) continue;
+                q.add(neighbor);
+                visited[neighbor] = true;
+                count++;
             }
         }
         
-        int one = 0, two = 0;
-        for(int i = 0; i<n; i++) {
-            if(visit[i]) one++;
-            else two++;
-        }
-
-        answer = Math.min(answer, Math.abs(one-two));
-
+        return count;
     }
 }
