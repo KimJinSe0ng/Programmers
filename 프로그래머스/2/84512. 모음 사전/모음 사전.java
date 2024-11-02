@@ -1,21 +1,26 @@
 import java.util.*;
 
 class Solution {
-    private static final char[] CHARS = "AEIOU".toCharArray();
+    private static final char[] VOWELS = {'A', 'E', 'I', 'O', 'U'};
+    private List<String> dictionary = new ArrayList<>();
 
     public int solution(String word) {
-        return generate("").indexOf(word);
+        generateWords("", 0);
+
+        Collections.sort(dictionary);
+
+        return dictionary.indexOf(word) + 1;
     }
 
-    private List<String> generate(String word) {
-        List<String> words = new ArrayList<>();
-        words.add(word);
+    private void generateWords(String current, int depth) {
+        if (depth > 5) return;
 
-        if (word.length() == 5) return words; //종료 조건
-
-        for (char c : CHARS) {
-            words.addAll(generate(word + c));
+        if (!current.isEmpty()) {
+            dictionary.add(current);
         }
-        return words;
+
+        for (char vowel : VOWELS) {
+            generateWords(current + vowel, depth + 1);
+        }
     }
 }
