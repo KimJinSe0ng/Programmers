@@ -1,13 +1,7 @@
 class Solution {
     public long solution(int a, int b) {
-        int minNumber = Math.min(a, b);
-        int maxNumber = Math.max(a, b);
-        long answer = 0;
-        
-        for(int i = minNumber; i <= maxNumber; i++) {
-            answer += (long) i;
-        }
-        
-        return answer;
+        long minNumber = Math.min(a, b);
+        long maxNumber = Math.max(a, b);
+        return (maxNumber - minNumber + 1) * (minNumber + maxNumber) / 2;
     }
 }
