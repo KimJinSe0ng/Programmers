@@ -1,13 +1,17 @@
 class Solution {
     public int[] solution(long n) {
-        String str = Long.toString(n);
-        String reversed = new StringBuilder(str).reverse().toString();
-        char[] arr = reversed.toCharArray();
+        StringBuilder sb = new StringBuilder(Long.toString(n));
+        sb.reverse();
         
-        int[] result = new int[arr.length];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = arr[i] - '0';
+        String s = sb.toString();
+        String[] S = s.split("");
+        
+        int[] answer = new int[S.length];
+        
+        for(int i = 0 ; i < S.length; i++) {
+            answer[i] = Integer.parseInt(S[i]);
         }
-        return result;
+        
+        return answer;
     }
 }
