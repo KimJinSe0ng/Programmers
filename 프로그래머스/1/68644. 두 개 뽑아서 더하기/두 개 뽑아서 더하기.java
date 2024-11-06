@@ -2,12 +2,21 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] numbers) {
-        Set<Integer> set = new HashSet<>();
-        for (int i = 0; i < numbers.length; i++) {
-            for (int j = i + 1; j < numbers.length; j++) {
-                set.add(numbers[i] + numbers[j]);
+        Set<Integer> answer = new HashSet<>();
+        for(int i = 0; i < numbers.length; i++) {
+            for(int j = 0; j < numbers.length; j++) {
+                if(i == j) {
+                    continue;
+                }
+                
+                answer.add(numbers[i] + numbers[j]);
             }
         }
-        return set.stream().mapToInt(Integer::intValue).sorted().toArray();
+        
+        List<Integer> result = new ArrayList<>(answer);
+        
+        Collections.sort(result);
+        
+        return result.stream().mapToInt(i -> i).toArray();
     }
 }
