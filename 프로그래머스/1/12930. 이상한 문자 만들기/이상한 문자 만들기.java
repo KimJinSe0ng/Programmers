@@ -1,22 +1,25 @@
 class Solution {
     public String solution(String s) {
-        StringBuilder sb = new StringBuilder();
-        boolean toUpper = true;
+        String answer = "";
         
-        for (char c : s.toCharArray()) {
-            if (!Character.isAlphabetic(c)) { //공백이면
-                sb.append(c);
-                toUpper = true; //공백문자 다음은 대문자
-            } else {
-                if (toUpper) {
-                    sb.append(Character.toUpperCase(c));
-                } else {
-                    sb.append(Character.toLowerCase(c));
-                }
-                toUpper = !toUpper;
+        s = s.toLowerCase();
+        
+        String[] str = s.split("");
+        
+        int key = 0;
+        
+        for(int i=0; i<str.length; i++) {
+            if(key % 2 == 0) {
+                str[i] = str[i].toUpperCase();
             }
+
+            if(str[i].isBlank()) {
+                key = -1;
+            }
+            answer += str[i];
+            key++;
         }
         
-        return sb.toString();
+        return answer;
     }
 }
