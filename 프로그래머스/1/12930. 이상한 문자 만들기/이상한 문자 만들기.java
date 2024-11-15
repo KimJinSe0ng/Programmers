@@ -1,25 +1,22 @@
 class Solution {
     public String solution(String s) {
-        String answer = "";
+        StringBuilder sb = new StringBuilder();
+        boolean toUpper = true;
         
-        s = s.toLowerCase();
-        
-        String[] str = s.split("");
-        
-        int key = 0;
-        
-        for(int i=0; i<str.length; i++) {
-            if(key % 2 == 0) {
-                str[i] = str[i].toUpperCase();
+        for (char c : s.toCharArray()) {
+            if (!Character.isAlphabetic(c)) {
+                sb.append(c);
+                toUpper = true;
+            } else {
+                if (toUpper) {
+                    sb.append(Character.toUpperCase(c));
+                } else {
+                    sb.append(Character.toLowerCase(c));
+                }
+                toUpper = !toUpper;
             }
-
-            if(str[i].isBlank()) {
-                key = -1;
-            }
-            answer += str[i];
-            key++;
         }
         
-        return answer;
+        return sb.toString();
     }
 }
