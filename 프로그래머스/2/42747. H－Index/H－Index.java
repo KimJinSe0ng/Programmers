@@ -12,5 +12,5 @@ class Solution {
     private boolean isValid(int[] citations, int h) {
         int index = citations.length - h;
         return citations[index] >= h;
-    }
+    } 
 }
