@@ -9,16 +9,18 @@ public class Main {
     static int M = 1234567891;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        L = Integer.parseInt(st.nextToken());
+        L = Integer.parseInt(br.readLine());
+        String input = br.readLine();
 
-        st = new StringTokenizer(br.readLine());
-        String number = st.nextToken();
+        long hashValue = 0;
+        long power = 1;
 
-        long sum = 0;
         for (int i = 0; i < L; i++) {
-            sum += (long) ((number.charAt(i) - 'a' + 1) * Math.pow(r, i)) % M;
+            int charValue = input.charAt(i) - 'a' + 1;
+            hashValue = (hashValue + (charValue * power) % M) % M;
+            power = (power * r) % M;
         }
-        System.out.println(sum);
+
+        System.out.println(hashValue);
     }
 }
