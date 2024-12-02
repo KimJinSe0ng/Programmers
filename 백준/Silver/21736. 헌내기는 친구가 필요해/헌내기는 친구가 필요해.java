@@ -51,19 +51,24 @@ public class Main {
 
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
+
             for (int d = 0; d < 4; d++) {
                 int ny = cur[0] + dy[d];
                 int nx = cur[1] + dx[d];
-                if (nx >= 0 && nx < M && ny >= 0 && ny < N) {
-                    if (!visited[ny][nx] && map[ny][nx] != 'X') {
-                        visited[ny][nx] = true;
-                        queue.add(new int[]{ny, nx});
-                        if (map[ny][nx] == 'P') {
-                            friend++;
-                        }
-                    }
+
+                if (nx < 0 || nx >= M || ny < 0 || ny >= N) continue;
+                if (visited[ny][nx]) continue;
+                if (map[ny][nx] == 'X') continue;
+
+                visited[ny][nx] = true;
+
+                if (map[ny][nx] == 'P') {
+                    friend++;
                 }
+
+                queue.add(new int[]{ny, nx});
             }
         }
     }
+
 }
