@@ -4,15 +4,14 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int T;
+    static int N;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        T = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
 
-        for (int i = 1; i <= T; i++) {
+        for (int i = 1; i <= N; i++) {
             System.out.println(i);
         }
-
     }
 }
