@@ -1,13 +1,23 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String input;
 
-        Scanner sc = new Scanner(System.in);
+        while ((input = br.readLine()) != null) {
+            StringTokenizer st = new StringTokenizer(input);
+            int A = Integer.parseInt(st.nextToken());
+            int B = Integer.parseInt(st.nextToken());
 
-        while(sc.hasNextInt()) {
-            int a = sc.nextInt();
-            int b = sc.nextInt();
-            System.out.println(a+b);
+            System.out.println(A + B);
         }
+    }
+
+    private static int add(int a, int b) {
+        return a + b;
     }
 }
