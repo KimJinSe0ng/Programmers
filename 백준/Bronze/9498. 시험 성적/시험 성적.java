@@ -1,19 +1,23 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int score = scanner.nextInt();
-        if (score >= 90) {
-            System.out.println("A");
-        } else if (score >= 80) {
-            System.out.println("B");
-        } else if (score >= 70) {
-            System.out.println("C");
-        } else if (score >= 60) {
-            System.out.println("D");
-        } else {
-            System.out.println("F");
-        }
+    static int score;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        score = Integer.parseInt(st.nextToken());
+
+        System.out.println(calculate(score));
+    }
+
+    private static String calculate(int score) {
+        if (score >= 60 && score < 70) return "D";
+        else if (score >= 70 && score < 80) return "C";
+        else if (score >= 80 && score < 90) return "B";
+        else if (score >= 90) return "A";
+        else return "F";
     }
 }
