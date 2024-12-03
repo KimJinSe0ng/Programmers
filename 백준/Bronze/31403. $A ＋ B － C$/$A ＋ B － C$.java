@@ -1,31 +1,27 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int a, b, c;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        a = Integer.parseInt(st.nextToken());
+        String A = st.nextToken();
 
         st = new StringTokenizer(br.readLine());
-        b = Integer.parseInt(st.nextToken());
+        String B = st.nextToken();
 
         st = new StringTokenizer(br.readLine());
-        c = Integer.parseInt(st.nextToken());
+        String C = st.nextToken();
 
-        digit(a, b, c);
-        str(a, b, c);
+        System.out.println(calculateByNumber(A, B, C));
+        System.out.println(calculateByString(A, B, C));
     }
 
-    private static void digit(int a, int b, int c) {
-        System.out.println(a + b - c);
+    private static int calculateByNumber(String A, String B, String C) {
+        return Integer.parseInt(A) + Integer.parseInt(B) - Integer.parseInt(C);
     }
 
-    private static void str(int a, int b, int c) {
-        int ab = Integer.parseInt(String.valueOf(a) + String.valueOf(b));
-        System.out.println(ab - c);
+    private static int calculateByString(String A, String B, String C) {
+        return Integer.parseInt(A + B) - Integer.parseInt(C);
     }
 }
