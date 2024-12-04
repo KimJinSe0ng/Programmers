@@ -16,9 +16,11 @@ public class Main {
             W = Integer.parseInt(st.nextToken());
             N = Integer.parseInt(st.nextToken());
 
-            int floor = N % H == 0 ? H : N % H; // N % H가 0이면 마지막 층
-            int room = (N - 1) / H + 1;         // 1호부터 시작하기 때문에 (N-1)/H + 1
+            //손님이 배정받을 층 수와 호수 계산
+            int floor = N % H == 0 ? H : N % H; //N % H가 0이면 마지막 층
+            int room = (N - 1) / H + 1;         //1호부터 시작하기 때문에 (N-1)/H + 1
 
+            //방 번호 출력 (층수*100 + 호수)
             System.out.println(floor * 100 + room);
         }
 
