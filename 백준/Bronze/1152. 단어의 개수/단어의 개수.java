@@ -1,25 +1,16 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
- 
+import java.io.*;
+import java.util.*;
+
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String s = br.readLine();
+        String input = br.readLine().trim();
         
-        int count = 0;
-        
-        boolean isPrevStr = false;
-        
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != ' ' && !isPrevStr) {
-                isPrevStr = true;
-                count++;
-            } else if (s.charAt(i) == ' ') {
-                isPrevStr = false;
-            }
+        if (input.isEmpty()) {
+            System.out.println(0);
+        } else {
+            String[] words = input.split(" ");
+            System.out.println(words.length);
         }
-        
-        System.out.println(count);
-        br.close();
     }
 }
