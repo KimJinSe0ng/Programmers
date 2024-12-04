@@ -1,23 +1,19 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main { //11720
+public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
 
-        st = new StringTokenizer(br.readLine());
-        String num = st.nextToken();
-        
-        char[] num_list = num.toCharArray();
+        char[] numbers = br.readLine().toCharArray();
 
         int sum = 0;
-        for (int i = 0; i < num_list.length; i++) {
-            sum += num_list[i] - '0';
+        for (char number : numbers) {
+            sum += Character.getNumericValue(number);
         }
+
         System.out.println(sum);
     }
 }
