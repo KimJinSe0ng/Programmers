@@ -1,29 +1,19 @@
-import java.util.Scanner;
- 
+import java.io.*;
+import java.util.*;
+
 public class Main {
- 
-	public static void main(String[] args) {
-		Scanner in = new Scanner(System.in);
- 
- 
-		int[] arr = new int[26];
-		
-		for(int i = 0; i < arr.length; i++) {
-			arr[i] = -1;
-		}
- 
-		String S = in.nextLine();
- 
-		for(int i = 0; i < S.length(); i++) {
-			char ch = S.charAt(i);
-    
-			if(arr[ch - 'a'] == -1) {	// arr 원소 값이 -1 인 경우에만 초기화
-				arr[ch - 'a'] = i;
-			}
-		}
- 
-		for(int val : arr) {	// 배열 출력
-			System.out.print(val + " ");
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        String input = st.nextToken();
+
+        for (int i = 0; i < 26; i++) {
+            char currentChar = (char) (i + 'a');
+            int idx = input.indexOf(currentChar);
+            sb.append(idx).append(" ");
+        }
+
+        System.out.println(sb.toString().trim());
+    }
 }
