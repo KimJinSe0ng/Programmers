@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     static int N, K;
@@ -10,7 +8,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
         coins = new int[N];
@@ -20,11 +17,14 @@ public class Main {
             coins[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = coins.length - 1; i >= 0; i--) {
-            if (coins[i] <= K) {
-                count += K / coins[i];
-                K = K % coins[i];
-            }
+        Arrays.sort(coins);
+
+        int idx = N - 1;
+        while (K > 0) {
+            int coin = coins[idx];
+            count += K / coin;
+            K %= coin;
+            idx--;
         }
 
         System.out.println(count);
