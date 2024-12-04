@@ -1,27 +1,31 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
 
-        while(true) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
+        while (true) {
+            st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
-            if(a == b && b == c && c == 0) break;
+            if (a == 0 && b == 0 && c == 0) {
+                break;
+            }
 
-            if (Math.pow(a, 2) == Math.pow(b, 2) + Math.pow(c, 2)) {
-                System.out.println("right");
-            } else if (Math.pow(b, 2) == Math.pow(c, 2) + Math.pow(a, 2)){
-                System.out.println("right");
-            } else if (Math.pow(c, 2) == Math.pow(a, 2) + Math.pow(b, 2)) {
-                System.out.println("right");
+            int[] sides = {a, b, c};
+            Arrays.sort(sides);
+
+            if (sides[0] * sides[0] + sides[1] * sides[1] == sides[2] * sides[2]) {
+                sb.append("right").append("\n");
             } else {
-                System.out.println("wrong");
+                sb.append("wrong").append("\n");
             }
         }
+
+        System.out.println(sb);
     }
 }
