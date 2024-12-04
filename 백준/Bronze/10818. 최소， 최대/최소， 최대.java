@@ -1,20 +1,22 @@
-import java.util.Arrays;
-import java.util.Scanner;
- 
+import java.io.*;
+import java.util.*;
+
 public class Main {
-	public static void main(String[] args) {
-    
-		Scanner in = new Scanner(System.in);
-        
-		int N = in.nextInt();
-		int[] arr = new int[N];
-        
-		for (int i = 0; i < N; i++) {
-			arr[i] = in.nextInt();
-		}
-        
-		in.close();
-		Arrays.sort(arr);
-		System.out.print(arr[0] + " " + arr[N - 1]);
-	}
+    private static int minValue = Integer.MAX_VALUE;
+    private static int maxValue = Integer.MIN_VALUE;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            minValue = Math.min(minValue, num);
+            maxValue = Math.max(maxValue, num);
+        }
+
+        System.out.printf("%d %d\n", minValue, maxValue);
+    }
 }
