@@ -1,24 +1,25 @@
-import java.util.Scanner;
- 
+import java.io.*;
+import java.util.*;
+
 public class Main {
-	public static void main(String[] args) {
- 
-		Scanner in = new Scanner(System.in);
- 
-		int N = in.nextInt();
-		int count = 1; // 겹 수(최소 루트)
-		int range = 2;	// 범위 (최솟값 기준) 
- 
-		if (N == 1) {
-			System.out.print(1);
-		}
- 
-		else {
-			while (range <= N) {	// 범위가 N보다 커지기 직전까지 반복 
-				range = range + (6 * count);	// 다음 범위의 최솟값으로 초기화 
-				count++;	// count 1 증가 
-			}
-			System.out.print(count);
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        long N = Long.parseLong(st.nextToken());
+
+        if (N == 1) {
+            System.out.println(1);
+            return;
+        }
+
+        long layer = 1; // 현재 계층
+        long maxNumber = 1; // 계층의 끝 번호
+
+        while (maxNumber < N) {
+            maxNumber += 6 * layer; // 다음 계층의 끝 번호
+            layer++;
+        }
+
+        System.out.println(layer);
+    }
 }
