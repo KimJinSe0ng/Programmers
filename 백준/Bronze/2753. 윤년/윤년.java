@@ -1,19 +1,18 @@
+import java.io.*;
 import java.util.*;
 
-class Main{
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        int year = sc.nextInt();
-        
-        if(year%4 == 0){
-            if(year%400 != 0 && year%100 == 0)
-                System.out.println("0");
-            else
-                System.out.println("1");
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int year = Integer.parseInt(st.nextToken());
+        System.out.println(calculate(year));
+    }
+
+    private static int calculate(int year) {
+        if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+            return 1;
         }
-        else{
-            System.out.println("0");
-        }
-        
+        return 0;
     }
 }
