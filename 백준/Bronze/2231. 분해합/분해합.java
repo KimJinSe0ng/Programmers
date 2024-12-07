@@ -1,28 +1,28 @@
-import javax.annotation.processing.SupportedSourceVersion;
 import java.io.*;
 import java.util.*;
+
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        int ans = 0;  //답
-        for (int i = 1; i < n; i++) {
-            int num = function(i);
-            if (num == n) { //분해합이 n과 같으면 i는 n의 생성자가 된다
-                ans = i;
+        int N = Integer.parseInt(br.readLine());
+        int result = 0;
+
+        for (int i = Math.max(1, N - 9 * String.valueOf(N).length()); i < N; i++) {
+            if (getDecompositionSum(i) == N) {
+                result = i;
                 break;
             }
         }
-        System.out.print(ans);
+
+        System.out.println(result);
     }
 
-    //분해합 구하는 함수
-    static int function(int n) {
-        int ret = n;
-        while (n != 0) {
-            ret += n % 10;
-            n /= 10;
+    private static int getDecompositionSum(int num) {
+        int sum = num;
+        while (num > 0) {
+            sum += num % 10;
+            num /= 10;
         }
-        return ret;
+        return sum;
     }
 }
