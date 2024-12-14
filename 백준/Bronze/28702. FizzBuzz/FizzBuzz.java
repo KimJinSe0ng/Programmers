@@ -11,7 +11,7 @@ public class Main {
         for (int i = 3; i >= 1; i--) {
             st = new StringTokenizer(br.readLine());
             String input = st.nextToken();
-            if (input.matches("[0-9]*")) {
+            if (input.matches("^[0-9]*")) {
                 number = Integer.parseInt(input) + i;
                 break;
             }
