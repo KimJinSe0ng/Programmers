@@ -1,29 +1,27 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main { //1546
+public class Main {
+    static int N;
+    static int[] scores;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int[] numbers = new int[n];
+        N = Integer.parseInt(st.nextToken());
+        scores = new int[N];
+        int maxScore = Integer.MIN_VALUE;
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            numbers[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            scores[i] = Integer.parseInt(st.nextToken());
+            maxScore = Math.max(maxScore, scores[i]);
         }
 
-        long sum = 0;
-        long max = Integer.MIN_VALUE;
-        for (int i = 0; i < n; i++) {
-            sum += numbers[i];
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
+        double sum = 0;
+        for (int i = 0; i < N; i++) {
+            sum += (double) scores[i] / maxScore * 100;
         }
 
-        System.out.println(sum * 100.0 / max / n);
+        System.out.println(sum / N);
     }
 }
