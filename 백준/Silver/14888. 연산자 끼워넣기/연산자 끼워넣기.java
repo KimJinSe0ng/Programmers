@@ -1,66 +1,68 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     static int N;
-    static int[] A;
-    static int[] op;
-    static int max = Integer.MIN_VALUE;
-    static int min = Integer.MAX_VALUE;
+    static int[] numbers;
+    static int[] operators = new int[4];
+    static int maxResult = Integer.MIN_VALUE;
+    static int minResult = Integer.MAX_VALUE;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         N = Integer.parseInt(st.nextToken());
-        A = new int[N];
-        op = new int[4];
+        numbers = new int[N];
+        operators = new int[4];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            A[i] = Integer.parseInt(st.nextToken());
+            numbers[i] = Integer.parseInt(st.nextToken());
         }
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < 4; i++) {
-            op[i] = Integer.parseInt(st.nextToken());
+            operators[i] = Integer.parseInt(st.nextToken());
         }
 
-        DFS(0, A[0]);
+        backtrack(1, numbers[0]);
 
-        System.out.println(max);
-        System.out.println(min);
+        System.out.println(maxResult);
+        System.out.println(minResult);
+
     }
 
-    private static void DFS(int index, int acc) {
-        if (index == N - 1) {
-            max = Math.max(max, acc);
-            min = Math.min(min, acc);
+    private static void backtrack(int idx, int currentResult) {
+        if (idx == N) {
+            maxResult = Math.max(maxResult, currentResult);
+            minResult = Math.min(minResult, currentResult);
+            return;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            if (operators[i] > 0) {
+                operators[i]--;
+
+                if (i == 0) { 
+                    backtrack(idx + 1, currentResult + numbers[idx]);
+                } else if (i == 1) { 
+                    backtrack(idx + 1, currentResult - numbers[idx]);
+                } else if (i == 2) { 
+                    backtrack(idx + 1, currentResult * numbers[idx]);
+                } else if (i == 3) { 
+                    backtrack(idx + 1, divide(currentResult, numbers[idx]));
+                }
+
+                operators[i]++; 
+            }
+        }
+    }
+
+    static int divide(int a, int b) {
+        if (a < 0) {
+            return -(-a / b);
         } else {
-            // 각 연산자에 대하여 재귀적으로 수행
-            if (op[0] > 0) {
-                op[0] -= 1;
-                DFS(index + 1, acc + A[index + 1]);
-                op[0] += 1;
-            }
-            if (op[1] > 0) {
-                op[1] -= 1;
-                DFS(index + 1, acc - A[index + 1]);
-                op[1] += 1;
-            }
-            if (op[2] > 0) {
-                op[2] -= 1;
-                DFS(index + 1, acc * A[index + 1]);
-                op[2] += 1;
-            }
-            if (op[3] > 0) {
-                op[3] -= 1;
-                DFS(index + 1, acc / A[index + 1]);
-                op[3] += 1;
-            }
+            return a / b;
         }
     }
-
 }
