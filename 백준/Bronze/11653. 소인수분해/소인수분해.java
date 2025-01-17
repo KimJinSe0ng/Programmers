@@ -9,14 +9,19 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
 
-        int divider = 2;
-        while (N > 1) {
-            if (N % divider == 0) {
-                N /= divider;
-                System.out.println(divider);
-            } else {
-                divider++;
+        if (N == 1) {
+            return;
+        }
+
+        for (int i = 2; i * i <= N; i++) {
+            while (N % i == 0) {
+                System.out.println(i);
+                N /= i;
             }
+        }
+
+        if (N > 1) {
+            System.out.println(N);
         }
     }
 }
