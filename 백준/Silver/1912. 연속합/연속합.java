@@ -5,25 +5,27 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int n;
-    static int[] numbers;
-    static int[] prefix;
-    static int max = Integer.MIN_VALUE;
-    public static void main(String[] args) throws IOException{
+    static int N;
+    static int[] A;
+    static int[] dp;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        numbers = new int[n];
-        prefix = new int[n + 1];
+
+        N = Integer.parseInt(st.nextToken());
+        A = new int[N];
+        dp = new int[N + 1];
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            numbers[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            A[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i = 0; i < n; i++) {
-            prefix[i + 1] = Math.max(prefix[i] + numbers[i], numbers[i]);
-            max = Math.max(prefix[i + 1], max);
+        int max = A[0];
+        for (int i = 0; i < N; i++) {
+            dp[i + 1] = Math.max(dp[i] + A[i], A[i]);
+            max = Math.max(max, dp[i + 1]);
         }
 
         System.out.println(max);
