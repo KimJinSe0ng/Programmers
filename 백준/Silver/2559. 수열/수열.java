@@ -6,37 +6,30 @@ import java.util.StringTokenizer;
 
 public class Main {
     static int N, K;
-    static int[] A;
-    static int[] prefix;
-    public static void main(String[] args) throws IOException{
+    static int[] temperatures;
+    static int[] dp;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
-
-        A = new int[N];
-        prefix = new int[N + 1];
+        temperatures = new int[N];
+        dp = new int[N + 1];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            A[i] = Integer.parseInt(st.nextToken());
+            temperatures[i] = Integer.parseInt(st.nextToken());
         }
 
-        // prefix 배열 초기화
         for (int i = 0; i < N; i++) {
-            prefix[i + 1] = prefix[i] + A[i];
+            dp[i + 1] = temperatures[i] + dp[i];
         }
 
-        // 부분 합 계산
-        int maxSum = Integer.MIN_VALUE;
-        for (int j = K; j <= N; j++) {
-            int currentSum = prefix[j] - prefix[j - K];
-            maxSum = Math.max(maxSum, currentSum);
+        int max = Integer.MIN_VALUE;
+        for (int i = K; i < N + 1; i++) {
+            max = Math.max(max, dp[i] - dp[i - K]);
         }
-
-        // 결과 출력
-        System.out.println(maxSum);
-
+        System.out.println(max);
     }
 }
