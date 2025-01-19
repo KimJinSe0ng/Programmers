@@ -21,18 +21,17 @@ public class Main {
         }
 
         int result = 0;
-        for (int i = 1; i < W - 1; i++) { //블록 별 모이는 빗물 계산, 첫번째와 마지막은 빗물이 고일 수 없어서 제외
+        for (int i = 1; i < W - 1; i++) {
             int left = 0;
             int right = 0;
 
-            for (int j = 0; j < i; j++) { //현재 블록 기준 모든 왼쪽 블록의 높이까지 검사
+            for (int j = 0; j < i; j++) {
                 left = Math.max(height[j], left);
             }
 
-            for (int j = i + 1; j < W; j++) { //현재 블록 기준 모든 오른쪽 블록의 높이까지 검사
+            for (int j = i + 1; j < W; j++) {
                 right = Math.max(height[j], right);
             }
-            
             if (height[i] < left && height[i] < right) {
                 result += Math.min(left, right) - height[i];
             }
