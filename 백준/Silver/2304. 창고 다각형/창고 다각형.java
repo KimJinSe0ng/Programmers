@@ -1,31 +1,29 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    static int N;
+    static int[] graph = new int[10001];
+    static List<Integer> xList = new ArrayList<>();
+    static List<Integer> yList = new ArrayList<>();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
 
-        int n = scanner.nextInt();
-
-        int[] graph = new int[1001];
-        ArrayList<Integer> xList = new ArrayList<>();
-        ArrayList<Integer> yList = new ArrayList<>();
-
-        for (int i = 0; i < n; i++) {
-            int x = scanner.nextInt();
-            int y = scanner.nextInt();
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
             graph[x] = y;
             xList.add(x);
             yList.add(y);
         }
 
         int maxHeight = 0;
-        for (int height : yList) { 
+        for (int height : yList) {
             if (height > maxHeight) {
                 maxHeight = height;
             }
@@ -38,8 +36,7 @@ public class Main {
             }
         }
 
-
-        int[] prefix = new int[maxWidth + 2]; 
+        int[] prefix = new int[maxWidth + 2];
         int[] suffix = new int[maxWidth + 2];
 
         ArrayList<Integer> maxPoint = new ArrayList<>();
@@ -70,7 +67,7 @@ public class Main {
         }
 
         System.out.println(answer);
-        scanner.close();
+
     }
 
     private static int max(int[] array) {
