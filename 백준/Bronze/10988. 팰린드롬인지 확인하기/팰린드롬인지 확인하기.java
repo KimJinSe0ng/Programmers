@@ -1,14 +1,29 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
+
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String s = br.readLine();
-        StringBuilder sb = new StringBuilder(s);
-        if (s.equals(sb.reverse().toString())) {
-            System.out.print(1);
+        String word = br.readLine();
+        
+        if (isFind(word)) {
+            System.out.println(1);
         } else {
-            System.out.print(0);
+            System.out.println(0);
         }
+    }
+    
+    private static boolean isFind(String word) {
+        int left = 0;
+        int right = word.length() - 1;
+        while(left < right) {
+            if(word.charAt(left) == word.charAt(right)) {
+                left++;
+                right--;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 }
