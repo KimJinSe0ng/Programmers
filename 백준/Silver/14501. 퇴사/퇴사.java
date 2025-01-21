@@ -3,42 +3,36 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main { // 재귀
+public class Main { // 바텀 업
     static int N;
-    static int[][] interview;
-    static int answer = Integer.MIN_VALUE;
+    static int[][] interviews;
+    static int[] dp;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
-        interview = new int[N][2];
+        interviews = new int[N][2];
+        dp = new int[N + 1];
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            interview[i][0] = Integer.parseInt(st.nextToken());
-            interview[i][1] = Integer.parseInt(st.nextToken());
+            interviews[i][0] = Integer.parseInt(st.nextToken());
+            interviews[i][1] = Integer.parseInt(st.nextToken());
         }
 
-        recur(0, 0);
-        System.out.println(answer);
-    }
+        for (int i = N - 1; i >= 0; i--) {
+            int nextDay = i + interviews[i][0];
 
-    public static void recur(int day, int price) {
-        if (day == N) {
-            if (price >= answer) {
-                answer = price;
+            if (nextDay <= N) {
+                dp[i] = Math.max(dp[i + 1], dp[nextDay] + interviews[i][1]);
+            } else {
+                dp[i] = dp[i + 1];
             }
-            return;
         }
 
-        if (day > N) {
-            return;
-        }
-
-        // 상담을 한다면
-        recur(day + interview[day][0], price + interview[day][1]);
-        // 상담을 안 한다면
-        recur(day + 1, price);
+        System.out.println(dp[0]); 
     }
+
 }
