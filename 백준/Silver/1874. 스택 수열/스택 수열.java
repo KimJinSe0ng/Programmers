@@ -4,41 +4,43 @@ import java.io.InputStreamReader;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-public class Main { //1874
+public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int[] numbers = new int[N];
-
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             numbers[i] = Integer.parseInt(st.nextToken());
         }
+
         Stack<Integer> stack = new Stack<>();
-        StringBuffer bf = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
+
         int num = 1;
         boolean result = true;
         for (int i = 0; i < numbers.length; i++) {
-            int su = numbers[i];
-            if (su >= num) {
-                while (su >= num) {
+            int now = numbers[i];
+            if (now >= num) {
+                while (now >= num) {
                     stack.push(num++);
-                    bf.append("+\n");
+                    sb.append("+\n");
                 }
                 stack.pop();
-                bf.append("-\n");
+                sb.append("-\n");
             } else {
                 int n = stack.pop();
-                if (n > su) {
+                if (n > now) {
                     System.out.println("NO");
                     result = false;
                     break;
                 } else {
-                    bf.append("-\n");
+                    sb.append("-\n");
                 }
             }
         }
-        if (result) System.out.println(bf.toString());
+
+        if (result) System.out.println(sb.toString().trim());
     }
 }
