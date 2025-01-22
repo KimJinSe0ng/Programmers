@@ -1,45 +1,44 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main { //1253
+public class Main {
+    static int N;
+    static long[] A;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int[] numbers = new int[n];
+        N = Integer.parseInt(st.nextToken());
+        A = new long[N];
+        int result = 0;
 
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            numbers[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) {
+            A[i] = Long.parseLong(st.nextToken());
         }
 
-        Arrays.sort(numbers);
-        int count = 0;
-
-        for (int i = 0; i < n; i++) {
-            int start_index = 0;
-            int end_index = n - 1;
-            int find = numbers[i];
-            while (start_index < end_index) {
-                if (numbers[start_index] + numbers[end_index] == find) {
-                    if (start_index != i && end_index != i) {
-                        count++;
+        Arrays.sort(A);
+        for (int k = 0; k < N; k++) {
+            long find = A[k];
+            int i = 0;
+            int j = N - 1;
+            while (i < j) {
+                if (A[i] + A[j] == find) {
+                    if (i != k && j != k) {
+                        result++;
                         break;
-                    } else if (start_index == i) {
-                        start_index++;
-                    } else if (end_index == i) {
-                        end_index--;
+                    } else if (i == k) {
+                        i++;
+                    } else if (j == k) {
+                        j--;
                     }
-                } else if (numbers[start_index] + numbers[end_index] < find) {
-                    start_index++;
+                } else if (A[i] + A[j] < find) {
+                    i++;
                 } else {
-                    end_index--;
+                    j--;
                 }
             }
         }
-        System.out.println(count);
+
+        System.out.println(result);
     }
 }
