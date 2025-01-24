@@ -1,77 +1,58 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int L, W;
-    static String[][] map;
-    static int[] dx = {0, 0, 1, -1};
-    static int[] dy = {1, -1, 0, 0};
-    static int maxDist = Integer.MIN_VALUE;
-
-    static class Node {
-        int x, y, dist;
-
-        public Node(int x, int y, int dist) {
-            this.x = x;
-            this.y = y;
-            this.dist = dist;
-        }
-    }
+    static int Y, X;
+    static char[][] map;
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
+    static int maxDistance = Integer.MIN_VALUE;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        L = Integer.parseInt(st.nextToken());
-        W = Integer.parseInt(st.nextToken());
+        Y = Integer.parseInt(st.nextToken());
+        X = Integer.parseInt(st.nextToken());
+        map = new char[Y][X];
 
-        map = new String[L][W];
-
-        for (int i = 0; i < L; i++) {
-            String line = br.readLine();
-            for (int j = 0; j < W; j++) {
-                map[i][j] = line.substring(j, j + 1);
-            }
+        for (int i = 0; i < Y; i++) {
+            map[i] = br.readLine().toCharArray();
         }
 
-        for (int i = 0; i < L; i++) {
-            for (int j = 0; j < W; j++) {
-                if (map[i][j].equals("L")) {
-                    bfs(i, j);
+        for (int y = 0; y < Y; y++) {
+            for (int x = 0; x < X; x++) {
+                if (map[y][x] == 'L') {
+                    bfs(y, x);
                 }
             }
         }
 
-        System.out.println(maxDist);
+        System.out.println(maxDistance);
     }
 
-    private static void bfs(int x, int y) {
-        Queue<Node> queue = new LinkedList<>();
-        boolean[][] visited = new boolean[L][W];
-        visited[x][y] = true;
-        queue.add(new Node(x, y, 0));
+    private static void bfs(int sY, int sX) {
+        Queue<int[]> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[Y][X];
+        int[][] dist = new int[Y][X];
+
+        queue.add(new int[]{sY, sX});
+        visited[sY][sX] = true;
 
         while (!queue.isEmpty()) {
-            Node current = queue.poll();
+            int[] now = queue.poll();
+            int y = now[0];
+            int x = now[1];
 
             for (int d = 0; d < 4; d++) {
-                int nx = current.x + dx[d];
-                int ny = current.y + dy[d];
-
-                if (nx < 0 || ny < 0 || nx >= L || ny >= W) {
-                    continue;
-                }
-                if (map[nx][ny].equals("W")) {
-                    continue;
-                }
-                if (!visited[nx][ny]) {
-                    visited[nx][ny] = true;
-                    int newDist = current.dist + 1;
-                    maxDist = Math.max(maxDist, newDist);
-                    queue.add(new Node(nx, ny, newDist));
+                int ny = y + dy[d];
+                int nx = x + dx[d];
+                if (0 <= ny && ny < Y && 0 <= nx && nx < X) {
+                    if (!visited[ny][nx] && map[ny][nx] == 'L') {
+                        queue.add(new int[]{ny, nx});
+                        dist[ny][nx] = dist[now[0]][now[1]] + 1;
+                        visited[ny][nx] = true;
+                        maxDistance = Math.max(maxDistance, dist[ny][nx]);
+                    }
                 }
             }
         }
