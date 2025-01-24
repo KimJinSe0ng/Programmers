@@ -1,15 +1,11 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     static int N;
     static int[] A;
     static int X;
-    static int count = 0;
-
+    static int pair = 0;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -28,16 +24,18 @@ public class Main {
 
         int left = 0;
         int right = A.length - 1;
+
         while (left < right) {
             if (A[left] + A[right] == X) {
-                count++;
-            }
-            if (A[left] + A[right] >= X) {
+                pair++;
+                left++;
                 right--;
-            } else {
+            } else if (A[left] + A[right] > X) {
+                right--;
+            } else if (A[left] + A[right] < X) {
                 left++;
             }
         }
-        System.out.println(count);
+        System.out.println(pair);
     }
 }
