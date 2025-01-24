@@ -1,50 +1,63 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N, M;
-    static ArrayList<Integer>[] network;
+    static int computers, networks;
+    static List<Integer>[] graph;
     static boolean[] visited;
-    static int count = 0;
+    static int answer = 0;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-
+        computers = Integer.parseInt(st.nextToken());
         st = new StringTokenizer(br.readLine());
-        M = Integer.parseInt(st.nextToken());
+        networks = Integer.parseInt(st.nextToken());
+        graph = new List[computers + 1];
+        visited = new boolean[computers + 1];
 
-        network = new ArrayList[N + 1];
-        visited = new boolean[N + 1];
-
-        for (int i = 1; i <= N; i++) {
-            network[i] = new ArrayList<>();
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
         }
 
-        for (int i = 0; i < M; i++) {
+        for (int i = 0; i < networks; i++) {
             st = new StringTokenizer(br.readLine());
             int s = Integer.parseInt(st.nextToken());
             int e = Integer.parseInt(st.nextToken());
-            network[s].add(e);
-            network[e].add(s);
+            graph[s].add(e);
+            graph[e].add(s);
         }
 
-        dfs(1);
-        System.out.println(count);
+//        dfs(1);
+        bfs(1);
+        System.out.println(answer);
     }
 
-    private static void dfs(int node) {
-        visited[node] = true;
-        for (int next : network[node]) {
+    private static void dfs(int S) {
+        visited[S] = true;
+
+        for (int next : graph[S]) {
             if (!visited[next]) {
-                visited[next] = true;
-                count++;
+                answer++;
                 dfs(next);
             }
         }
     }
 
+    private static void bfs(int S) {
+        Queue<Integer> queue = new LinkedList<>();
+        visited[S] = true;
+        queue.add(S);
+
+        while (!queue.isEmpty()) {
+            int now = queue.poll();
+
+            for (int next : graph[now]) {
+                if (!visited[next]) {
+                    visited[next] = true;
+                    answer++;
+                    queue.add(next);
+                }
+            }
+        }
+    }
 }
