@@ -1,62 +1,59 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N, M;
+    static int N;
     static int[] cards;
+    static int M;
     static int[] guess;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuilder sb = new StringBuilder();
-
         N = Integer.parseInt(st.nextToken());
-        cards = new int[N];
-
         st = new StringTokenizer(br.readLine());
+        cards = new int[N];
         for (int i = 0; i < N; i++) {
             cards[i] = Integer.parseInt(st.nextToken());
         }
-
         st = new StringTokenizer(br.readLine());
         M = Integer.parseInt(st.nextToken());
-        guess = new int[M];
-
         st = new StringTokenizer(br.readLine());
+        guess = new int[M];
         for (int i = 0; i < M; i++) {
             guess[i] = Integer.parseInt(st.nextToken());
         }
+        StringBuilder sb = new StringBuilder();
 
         Arrays.sort(cards);
 
-        for (int i = 0; i < guess.length; i++) {
-            int l = 0;
-            int r = cards.length - 1;
-            boolean isFind = false;
-
-            while (l <= r) {
-
-                int mid = (l + r) / 2;
-
-                if (cards[mid] > guess[i]) {
-                    r = mid - 1;
-                } else if (cards[mid] < guess[i]) {
-                    l = mid + 1;
-                } else {
-                    isFind = true;
-                    break;
-                }
-            }
-
-            if (isFind) {
-                sb.append("1 ");
+        for (int i = 0; i < M; i++) {
+            if (binarySearch(guess[i])) {
+                sb.append("1");
             } else {
-                sb.append("0 ");
+                sb.append("0");
+            }
+            sb.append(" ");
+        }
+
+        System.out.println(sb.toString().trim());
+    }
+
+    private static boolean binarySearch(int target) {
+        int start = 0;
+        int end = cards.length - 1;
+
+        while (start <= end) {
+            int mid = (start + end) / 2;
+
+            if (cards[mid] < target) {
+                start = mid + 1;
+            } else if (cards[mid] > target) {
+                end = mid - 1;
+            } else {
+                return true;
             }
         }
-        System.out.println(sb.toString().trim());
+
+        return false;
     }
 }
