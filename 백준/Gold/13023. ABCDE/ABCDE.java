@@ -1,60 +1,55 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     static int N, M;
+    static List<Integer>[] graph;
     static boolean[] visited;
-    static ArrayList<Integer>[] A;
-    static boolean isExist = false;
+    static boolean found = false;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        A = new ArrayList[N];
-        visited = new boolean[N];
-
+        graph = new List[N];
         for (int i = 0; i < N; i++) {
-            A[i] = new ArrayList<>();
+            graph[i] = new ArrayList<>();
         }
 
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-            A[s].add(e);
-            A[e].add(s);
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            graph[a].add(b);
+            graph[b].add(a);
         }
 
-        for (int i = 0; i < N; i++) { //0부터 시작하여 N까지 찾아보기
-            DFS(i, 0);
-            if (isExist) {
-                break;
-            }
+        for (int i = 0; i < N; i++) {
+            visited = new boolean[N];
+            dfs(i, 1);
+            if (found) break;
         }
 
-        if (isExist) {
-            System.out.println(1);
-        } else {
-            System.out.println(0);
-        }
+        System.out.println(found ? 1 : 0);
     }
 
-    private static void DFS(int now, int relationship) {
-        if (relationship == 4 || isExist) {
-            isExist = true;
+    private static void dfs(int v, int depth) {
+        if (found) return;
+
+        if (depth == 5) {
+            found = true;
             return;
         }
-        visited[now] = true;
 
-        for (int next : A[now]) {
+        visited[v] = true;
+
+        for (int next : graph[v]) {
             if (!visited[next]) {
-                DFS(next, relationship + 1);
+                dfs(next, depth + 1);
             }
         }
-        visited[now] = false; //노드가 연결되어 있을 수 있지만 true 상태이면 방문하지 않는다. 즉, 관계 파악할 수 없음
+
+        visited[v] = false;
     }
 }
