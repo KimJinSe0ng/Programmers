@@ -1,76 +1,70 @@
-import java.util.*;
-import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class Main {
+    static ArrayList<Integer> a[];
+    static boolean visited[];
+    static int n;
+    static int m;
+    static int s;
 
-        static StringBuilder sb = new StringBuilder();
-        static boolean[] check;
-        static int[][] arr;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        n = scanner.nextInt();
+        m = scanner.nextInt();
+        s = scanner.nextInt();
+        a = new ArrayList[n + 1];
 
-        static int node, line, start;
-
-        static Queue<Integer> q = new LinkedList<>();
-
-        public static void main(String[] args) throws IOException {
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            node = Integer.parseInt(st.nextToken());
-            line = Integer.parseInt(st.nextToken());
-            start= Integer.parseInt(st.nextToken());
-
-            arr = new int[node+1][node+1];
-            check = new boolean[node+1];
-
-            for(int i = 0 ; i < line ; i ++) {
-                StringTokenizer str = new StringTokenizer(br.readLine());
-
-                int a = Integer.parseInt(str.nextToken());
-                int b = Integer.parseInt(str.nextToken());
-
-                arr[a][b] = arr[b][a] =  1;
-            }
-            //sb.append("\n");
-            dfs(start);
-            sb.append("\n");
-            check = new boolean[node+1];
-
-            bfs(start);
-
-            System.out.println(sb);
-
-        }
-        public static void dfs(int start) {
-
-            check[start] = true;
-            sb.append(start + " ");
-
-            for(int i = 0 ; i <= node ; i++) {
-                if(arr[start][i] == 1 && !check[i])
-                    dfs(i);
-            }
-
+        for (int i = 1; i <= n; i++) {
+            a[i] = new ArrayList<>();
         }
 
-        public static void bfs(int start) {
-            q.add(start);
-            check[start] = true;
+        for (int i = 0; i < m; i++) {
+            int u = scanner.nextInt();
+            int v = scanner.nextInt();
+            a[u].add(v);
+            a[v].add(u);
+        }
 
-            while(!q.isEmpty()) {
+        for (int i = 1; i <= n; i++) {
+            Collections.sort(a[i]);
+        }
 
-                start = q.poll();
-                sb.append(start + " ");
+        visited = new boolean[n + 1];
+        dfs(s);
+        System.out.println();
+        visited = new boolean[n + 1];
+        bfs(s);
+        System.out.println();
+    }
 
-                for(int i = 1 ; i <= node ; i++) {
-                    if(arr[start][i] == 1 && !check[i]) {
-                        q.add(i);
-                        check[i] = true;
-                    }
+    private static void dfs(int node) {
+        System.out.print(node + " ");
+        visited[node] = true;
+        for (int i : a[node]) {
+            if (!visited[i]) {
+                dfs(i);
+            }
+        }
+    }
+
+    private static void bfs(int node) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(node);
+        visited[node] = true;
+
+        while (!queue.isEmpty()) {
+            int now_node = queue.poll();
+            System.out.print(now_node + " ");
+            for (int i : a[now_node]) {
+                if (!visited[i]) {
+                    visited[i] = true;
+                    queue.add(i);
                 }
             }
-
-
         }
-
     }
+}
