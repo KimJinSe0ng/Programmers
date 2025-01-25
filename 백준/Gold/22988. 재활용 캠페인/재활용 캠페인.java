@@ -24,31 +24,32 @@ public class Main {
 
         Arrays.sort(bottles);
 
-        int l = 0;
-        int r = bottles.length - 1;
+        int s = 0;
+        int e = N - 1;
         int count = 0;
         int remain = 0;
 
-        while (l <= r) {
-            if (bottles[r] == X) {
+        while (s <= e) {
+            if (bottles[e] == X) {
                 count++;
-                r--;
+                e -= 1;
                 continue;
             }
 
-            if (l == r) {
+            if (s == e) {
                 remain++;
                 break;
             }
-            if (bottles[l] + bottles[r] < X / 2.0) {
-                l++;
-                remain++;
-            } else {
-                r--;
-                l++;
+            if (bottles[s] + bottles[e] >= X / 2.0) { //두 병 용량의 합이 총량의 절반에 가까우면, 남은 절반을 채워주기 때문에 꽉 채운 용기를 받을 수 있다.
                 count++;
+                e -= 1;
+                s += 1;
+            } else { //절반에 가깝지 않다면
+                s += 1;
+                remain++;
             }
         }
+
         System.out.println(count + (remain / 3));
     }
 }
