@@ -1,54 +1,49 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.StringTokenizer;
- 
+import java.io.*;
+import java.util.*;
+
 public class Main {
-	public static void main(String[] args) throws IOException {
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-		
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		
-		int[] tree = new int[N];
-		
-		int min = 0;
-		int max = 0;
-		
-		st = new StringTokenizer(br.readLine(), " ");
-		for(int i = 0; i < N; i++) {
-			tree[i] = Integer.parseInt(st.nextToken());
-			
-			if(max < tree[i]) {
-				max = tree[i];
-			}
-		}
-		
-		while(min < max) {
-			
-			int mid = (min + max) / 2;
-			long sum = 0;
-			for(int treeHeight : tree) {
-				
-				if(treeHeight - mid > 0) { 
-					sum += (treeHeight - mid);
-				}
-			}
-			
- 
-			if(sum < M) {
-				max = mid;
-			}
-			
-			else {
-				min = mid + 1;
-			}
-		}
-		
-		System.out.println(min - 1);
-		
-	}
+    static int N;
+    static long M;
+    static int[] trees;
+    static int maxTreeHeight = Integer.MIN_VALUE;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Long.parseLong(st.nextToken());
+        trees = new int[N];
+
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            trees[i] = Integer.parseInt(st.nextToken());
+            maxTreeHeight = Math.max(maxTreeHeight, trees[i]);
+        }
+
+        Arrays.sort(trees);
+
+        long start = 0;
+        long end = maxTreeHeight;
+        long maxHeight = Integer.MIN_VALUE;
+
+        while (start <= end) {
+            long mid = (start + end) / 2;
+            long timber = 0;
+
+            for (int height : trees) {
+                if (height > mid) {
+                    timber += height - mid;
+                }
+            }
+
+            if (timber >= M) {
+                maxHeight = mid;
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+        }
+
+        System.out.println(maxHeight);
+    }
 }
