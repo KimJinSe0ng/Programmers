@@ -1,40 +1,57 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        int M = sc.nextInt();
-        int[] A = new int[N];
-        int start = 0;
-        int end = 0;
+    static int N, M;
+    static int[] lessons;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        lessons = new int[N];
+        st = new StringTokenizer(br.readLine());
+
+        int maxLesson = 0;
+        int totalLength = 0;
         for (int i = 0; i < N; i++) {
-            A[i] = sc.nextInt();
-            if (start < A[i]) {
-                start = A[i];
-            }
-            end = end + A[i];
+            lessons[i] = Integer.parseInt(st.nextToken());
+            maxLesson = Math.max(maxLesson, lessons[i]);
+            totalLength += lessons[i];
         }
-        while (start <= end) {
-            int middle = (start + end) / 2;
-            int sum = 0;
-            int count = 0;
-            for (int i = 0; i < N; i++) {
-                if (sum + A[i] > middle) {
-                    count++;
-                    sum = 0;
-                }
-                sum = sum + A[i];
-            }
-            if (sum != 0) {
-                count++;
-            }
-            if (count > M) {
-                start = middle + 1;
+
+        int left = maxLesson;
+        int right = totalLength;
+        int result = totalLength;
+
+        while (left <= right) {
+            int mid = (left + right) / 2; 
+
+            if (canDivide(lessons, N, M, mid)) {
+                result = mid; 
+                right = mid - 1;
             } else {
-                end = middle - 1;
+                left = mid + 1;
             }
         }
-        System.out.println(start);
+
+        System.out.println(result);
+    }
+
+    private static boolean canDivide(int[] lessons, int N, int M, int x) {
+        int count = 1;
+        int sum = 0;
+
+        for (int i = 0; i < N; i++) {
+            if (sum + lessons[i] > x) {
+                count++;
+                sum = lessons[i];
+                if (count > M) return false;
+            } else {
+                sum += lessons[i];
+            }
+        }
+
+        return true; 
     }
 }
