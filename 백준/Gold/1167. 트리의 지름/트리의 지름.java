@@ -1,71 +1,74 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N;
-    static ArrayList<Edge>[] A;
-    static int[] distance;
+    static int V;
     static boolean[] visited;
+    static int[] distance;
+    static List<Node>[] graph;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        V = Integer.parseInt(st.nextToken());
+        graph = new List[V + 1];
+        visited = new boolean[V + 1];
+        distance = new int[V + 1];
+        for (int i = 1; i <= V; i++) {
+            graph[i] = new ArrayList<>();
+        }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        A = new ArrayList[N + 1];
-        for (int i = 1; i <= N; i++) {
-            A[i] = new ArrayList<>();
-        }
-        for (int i = 0; i < N; i++) {
-            int S = sc.nextInt();
-            while (true) {
-                int E = sc.nextInt();
-                if (E == -1) {
-                    break;
-                }
-                int V = sc.nextInt();
-                A[S].add(new Edge(E, V));
-            }
-        }
-        distance = new int[N + 1];
-        visited = new boolean[N + 1];
-        bfs(1);
-        int Max = 1;
-        for (int i = 2; i <= N; i++) {
-            if (distance[Max] < distance[i]) {
-                Max = i;
+        for (int i = 0; i < V; i++) {
+            st = new StringTokenizer(br.readLine());
+            int v = Integer.parseInt(st.nextToken());
+            while (st.hasMoreTokens()) {
+                String token = st.nextToken();
+                if (token.equals("-1")) break;
+                int neighbor = Integer.parseInt(token);
+                int weight = Integer.parseInt(st.nextToken());
+                graph[v].add(new Node(neighbor, weight));
             }
         }
 
-        distance = new int[N + 1];
-        visited = new boolean[N + 1];
-        bfs(Max);
-        Arrays.sort(distance);
-        System.out.println(distance[N]);
+        int startNode = bfs(1);  // 임의의 노드에서 가장 먼 노드 찾기
+        int diameter = bfs(startNode);  // 그 노드에서 가장 먼 거리 찾기
+        System.out.println(distance[diameter]);
     }
 
-    private static void bfs(int index) {
+    private static int bfs(int start) {
+        Arrays.fill(visited, false);
+        Arrays.fill(distance, 0);
         Queue<Integer> queue = new LinkedList<>();
-        queue.add(index);
-        visited[index] = true;
+        queue.add(start);
+        visited[start] = true;
+
+        int farthestNode = start;
+
         while (!queue.isEmpty()) {
-            int now_node = queue.poll();
-            for (Edge i : A[now_node]) {
-                int e = i.e;
-                int v = i.value;
-                if (!visited[e]) {
-                    visited[e] = true;
-                    queue.add(e);
-                    distance[e] = distance[now_node] + v;
+            int current = queue.poll();
+
+            for (Node neighbor : graph[current]) {
+                if (!visited[neighbor.v]) {
+                    visited[neighbor.v] = true;
+                    distance[neighbor.v] = distance[current] + neighbor.g;
+                    queue.add(neighbor.v);
+
+                    if (distance[neighbor.v] > distance[farthestNode]) {
+                        farthestNode = neighbor.v;
+                    }
                 }
             }
         }
+
+        return farthestNode;
     }
-}
 
-class Edge {
-    int e; //목적지 노드
-    int value; //에지의 가중치
+    private static class Node {
+        public int v;
+        public int g;
 
-    public Edge(int e, int value) {
-        this.e = e;
-        this.value = value;
+        public Node(int v, int g) {
+            this.v = v;
+            this.g = g;
+        }
     }
 }
