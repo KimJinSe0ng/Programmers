@@ -7,25 +7,21 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
-        PriorityQueue<Integer> cards = new PriorityQueue<>();
-
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            cards.add(Integer.parseInt(st.nextToken()));
+            pq.add(Integer.parseInt(st.nextToken()));
         }
 
-        int totalComparison = 0;
-        while (cards.size() > 1) {
-            int first = cards.poll();
-            int second = cards.poll();
-            int combined = first + second;
-
-            totalComparison += combined;
-            cards.add(combined);
+        int data1 = 0;
+        int data2 = 0;
+        int sum = 0;
+        while (pq.size() != 1) {
+            data1 = pq.remove();
+            data2 = pq.remove();
+            sum += data1 + data2;
+            pq.add(data1 + data2);
         }
-
-        System.out.println(totalComparison);
-
+        System.out.println(sum);
     }
-
 }
