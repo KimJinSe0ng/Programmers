@@ -1,64 +1,52 @@
 import java.io.*;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        char[] s1 = st.nextToken().toCharArray();
 
-	static int[][] dp;
-	static StringBuilder sb = new StringBuilder();
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		String str1 = br.readLine();
-		String str2 = br.readLine();
-		
-		LCS2(str1,str2);
-		getLCSToString(str1, str1.length(), str2.length());
-		
-		
-		System.out.println(sb.toString());
-	}
-	
-	static void LCS2 (String str1, String str2) {
-		int n1 = str1.length();
-		int n2 = str2.length();
-		
-		dp = new int[n1+1][n2+1];
-		int max =-1;
-		for(int i=1; i<n1+1; i++) {
-			for(int j=1; j<n2+1; j++) {
-				if(str1.charAt(i-1) == str2.charAt(j-1)) {
-					dp[i][j] = dp[i-1][j-1] +1;
-				}else {
-					dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
-				}
-			}
-		}
-		
-		sb.append(dp[n1][n2] + "\n");
-	}
-	
-	static void getLCSToString(String str, int i, int j) {
-		Stack<Character> st = new Stack<>();
-		while(i>0 && j>0) {
-			
-			if(i == 0 || j ==0)break;
-			
-			if(dp[i][j] == dp[i-1][j]) {
-				i--;
-			}else if(dp[i][j] == dp[i][j-1]) {
-				j--;
-			}else {
-				st.push(str.charAt(i-1));
-				i--;
-				j--;
-			}
-			
-			
-		}
-		while(!st.isEmpty()) {
-			sb.append(st.pop());
-		}
-	
-		
-	}
+        st = new StringTokenizer(br.readLine());
+        char[] s2 = st.nextToken().toCharArray();
+
+        int[][] dp = new int[s1.length + 1][s2.length + 1];
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 1; i <= s1.length; i++) {
+            for (int j = 1; j <= s2.length; j++) {
+                if (s1[i - 1] == s2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    sb.append(s1[i - 1]);
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+
+        System.out.println(dp[s1.length][s2.length]);
+
+        // LCS 문자열 찾기 (Backtracking)
+        StringBuilder lcs = new StringBuilder();
+        int i = s1.length, j = s2.length;
+
+        while (i > 0 && j > 0) {
+            if (s1[i - 1] == s2[j - 1]) {  // 같은 문자일 경우
+                lcs.append(s1[i - 1]);  // LCS에 추가
+                i--;
+                j--;
+            } else if (dp[i - 1][j] >= dp[i][j - 1]) {
+                i--;  // 위쪽으로 이동
+            } else {
+                j--;  // 왼쪽으로 이동
+            }
+        }
+
+        // LCS 문자열 출력 (역순이므로 뒤집어서 출력)
+        if (lcs.length() > 0) {
+            System.out.println(lcs.reverse().toString());
+        }
+
+    }
 }
